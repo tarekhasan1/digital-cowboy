@@ -2,32 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+.angle-btn {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(243, 6, 6, 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 0.3s;
   }
-}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .angle-btn:hover {
+    background-color: rgba(15, 1, 1, 0.4);
   }
-}
+
+  .angle-btn.left {
+    left: -36px;
+  }
+
+  .angle-btn.right {
+    right: -36px;
+  }
+
+  @media screen and (max-width: 850px) {
+    .angle-btn.left {
+      left: -25px;
+    }
+
+    .angle-btn.right {
+      right: -25px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .angle-btn.left {
+      left: -17px;
+    }
+
+    .angle-btn.right {
+      right: -17px;
+    }
+  }
+
+  .angle-btn img {
+    width: 15px;
+    height: 15px;
+  }
