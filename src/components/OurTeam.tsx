@@ -5,58 +5,46 @@ import React from "react";
 const OurTeam: React.FC = () => {
     const teamMembers = [
         {
-            name: "Allison Rusmussen",
-            role: "CEO & Founder",
+            name: "Allison Rasmussen",
+            role: "Founder & CEO",
             responsibilities: "Leads the company vision and strategy, ensuring growth and innovation. Oversees relationship with clients and collaborators.",
             image: "/user.jpg", // Replace with actual image path
         },
         {
             name: "Tarek Hasan",
-            role: "Founder & Chief Technology Officer",
+            role: "Founder & CTO",
             responsibilities: "Involved in the leading of company vision and strategy, ensuring growth and innovation. Oversees all technical aspects of the company, ensuring top-notch quality in every project.",
-            image: "/user.jpg",
+            image: "/team/tarek.jpg",
         },
         {
             name: "Naim Toki",
             role: "Head of Design",
             responsibilities: "Guides the creative vision for projects, ensuring visually compelling and user-friendly designs.",
-            image: "/user.jpg",
+            image: "/team/toki.jpg",
         },
         {
             name: "Faridul Islam",
             role: "Lead Developer",
             responsibilities: "Leads the development team, ensuring code quality and technical innovation.",
-            image: "/user.jpg",
+            image: "/team/faridul.jpeg",
         },
         {
-            name: "Kajol Chowdhury",
-            role: "Marketing Director",
-            responsibilities: "Drives marketing strategies that enhance brand presence and engagement.",
-            image: "/user.jpg",
-        },
-        {
-            name: "salesman 1",
-            role: "Project Manager",
-            responsibilities: "Manages project timelines, client communication, and team coordination.",
-            image: "/user.jpg",
-        },
-        {
-            name: "salesman 2",
-            role: "Project Manager",
-            responsibilities: "Manages project timelines, client communication, and team coordination.",
-            image: "/user.jpg",
-        },
-        {
-            name: "Muhammad Munna",
+            name: "Abdullah Munna",
             role: "Backend Developer",
             responsibilities: "Designs databse, develops backends, and security management.",
-            image: "/user.jpg",
+            image: "/team/munna.png",
         },
         {
             name: "Rownok Basunia",
             role: "Front-End Developer",
             responsibilities: "Manages project front-ends, feature implementations, and ensures best user experiences.",
-            image: "/user.jpg",
+            image: "/team/rownok.jpg",
+        },
+        {
+            name: "Kajol Chowdhury",
+            role: "Marketing Officer",
+            responsibilities: "Drives marketing strategies that enhance brand presence and engagement.",
+            image: "/team/kajol.jpg",
         },
     ];
 
