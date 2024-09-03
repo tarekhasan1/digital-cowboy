@@ -5,7 +5,7 @@
 .angle-btn {
     width: 30px;
     height: 30px;
-    background-color: rgba(243, 6, 6, 0.2);
+    background-color: orange;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -17,7 +17,7 @@
   }
 
   .angle-btn:hover {
-    background-color: rgba(15, 1, 1, 0.4);
+    background-color: orangered;
   }
 
   .angle-btn.left {

@@ -10,21 +10,36 @@ const Navbar: React.FC = () => {
         setIsOpen(!isOpen);
     };
 
+    const getLink = (item: any) => {
+        switch (item.toLowerCase()) {
+          case 'home':
+            return '/';
+          case 'services':
+          case 'about':
+            return `/#${item.toLowerCase()}`;
+          case 'pricing':
+          case 'blog':
+            return `/${item.toLowerCase()}`;
+          default:
+            return '/'; // Fallback for any unhandled items
+        }
+      };
+
     return (
         <nav className="fixed z-50 w-full bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
-                        <Image src="/logo.png" width={100} height={40} alt="logo" className="w-[150px]"/>
+                        <Image src="/logo.png" width={80} height={30} alt="logo" className="w-[100px]"/>
                     </div>
                     <div className="hidden md:flex items-center">
                         <div className="ml-10 flex items-baseline space-x-6">
-                            {["Home", "About", "Services", "Blog"].map(
+                            {["Home", "About", "Services","Pricing", "Blog"].map(
                                 (item) => (
                                     <Link
                                         className="relative text-black hover:text-orange-700 px-4 py-2 rounded-lg text-lg font-semibold transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
                                         key={item}
-                                        href={`/${item.toLowerCase()}`}
+                                        href={getLink(item)}
                                     >
                                         {item}
                                     </Link>
@@ -33,7 +48,7 @@ const Navbar: React.FC = () => {
                         </div>
                         <Link
                             className="ml-6 bg-orange-700 text-white hover:bg-white hover:text-orange-700 px-4 py-2 rounded-lg text-lg font-semibold transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 hidden md:inline-block"
-                            href="/contact"
+                            href="#contact"
                         >
                             Contact Us
                         </Link>
@@ -73,14 +88,14 @@ const Navbar: React.FC = () => {
             {/* Mobile Menu */}
             {isOpen && (
                 <div className="md:hidden">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-orange-700 shadow-lg">
-                        {["Home", "About", "Services", "Blog"].map(
+                    <div className="px-2 pt-2 pb-6 space-y-1 sm:px-3 bg-orange-700 shadow-lg">
+                        {["Home", "About", "Services","Pricing", "Blog"].map(
                             (item) => (
                                 <Link
                                     onClick={() => setIsOpen(false)}
                                     className="block text-white hover:bg-orange-800 px-3 py-2 rounded-lg text-lg font-medium transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
                                     key={item}
-                                    href={`/${item.toLowerCase()}`}
+                                    href={getLink(item)}
                                 >
                                     {item}
                                 </Link>
@@ -88,8 +103,8 @@ const Navbar: React.FC = () => {
                         )}
                         <Link
                             onClick={() => setIsOpen(false)}
-                            className="block bg-white text-orange-700 hover:bg-orange-800 hover:text-white px-4 py-2 rounded-lg text-lg font-semibold transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-                            href="/contact"
+                            className="block w-fit bg-white text-orange-700 hover:bg-orange-800 hover:text-white px-4 py-2 rounded-lg text-lg font-semibold transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+                            href="#contact"
                         >
                             Contact Us
                         </Link>

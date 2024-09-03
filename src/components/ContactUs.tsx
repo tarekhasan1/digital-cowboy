@@ -4,11 +4,11 @@ import React from "react";
 
 const ContactUs: React.FC = () => {
     return (
-        <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div id="contact" className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             {/* Image Section */}
             <div>
                 <Image
-                    src="/cowboy.png" // Replace with your image path
+                    src="/contact-us.gif" // Replace with your image path
                     alt="Contact Us"
                     width={500}
                     height={400}
@@ -24,7 +24,7 @@ const ContactUs: React.FC = () => {
                 </p>
                 <a
                     href="mailto:info@digitalcowboy.com" // Replace with your actual email
-                    className="text-white bg-cyan-600 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-cyan-700 transition duration-300 text-center"
+                    className="text-white w-1/2 mx-auto bg-orange-600 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-orange-700 transition duration-300 text-center"
                 >
                     Email Us
                 </a>

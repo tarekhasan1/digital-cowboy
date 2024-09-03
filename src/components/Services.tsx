@@ -124,8 +124,8 @@ const Services: React.FC = () => {
     ];
 
     return (
-        <div
-            className="max-w-7xl mx-auto px-6 py-12"
+        <div id="services"
+            className="max-w-7xl mx-auto px-6 py-16"
             style={{ backgroundImage: "url('/bg5.gif')" }}
         >
             <h2 className="text-center text-gray-600 text-2xl md:text-4xl mb-12 font-bold">

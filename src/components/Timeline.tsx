@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -10,8 +10,13 @@ const Timeline: React.FC = () => {
         });
     }, []);
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8" style={{ backgroundImage: "url('/bg6.gif')" }}>
-            <h1 className="text-center text-gray-600 text-2xl md:text-4xl mb-12 font-bold">Work Process</h1>
+        <div
+            className="max-w-4xl mx-auto px-4 py-8"
+            style={{ backgroundImage: "url('/bg6.gif')" }}
+        >
+            <h1 className="text-center text-gray-600 text-2xl md:text-4xl mb-12 font-bold">
+                Work Process
+            </h1>
             <div className="relative">
                 {/* Vertical Dashed Line */}
                 <div
@@ -20,7 +25,12 @@ const Timeline: React.FC = () => {
                 ></div>
 
                 {/* Step 1 - Left Side */}
-                <div data-aos="slide-right" className="mb-8 flex items-center w-full">
+                <div
+                    data-aos="slide-right"
+                    ata-aos-offset="300"
+                    data-aos-easing="ease-in-sine"
+                    className="mb-8 flex items-center w-full"
+                >
                     <div className="w-1/2 pr-8 text-right">
                         <h3 className="text-xl font-semibold text-gray-800 mb-2">
                             Project Scoping
@@ -41,7 +51,12 @@ const Timeline: React.FC = () => {
                 </div>
 
                 {/* Step 2 - Right Side */}
-                <div data-aos="slide-left" data-aos-duration="4000" className="mb-8 flex items-center w-full">
+                <div
+                    data-aos="slide-left"
+                    ata-aos-offset="300"
+                    data-aos-easing="ease-in-sine"
+                    className="mb-8 flex items-center w-full"
+                >
                     <div className="w-1/2"></div>
                     <div
                         className="relative max-w-[82px] sm:w-[70px] h-16 flex items-center justify-center bg-gradient-to-b from-green-300 to-green-600 text-white font-bold text-2xl rounded-full mx-auto"
@@ -62,7 +77,13 @@ const Timeline: React.FC = () => {
                 </div>
 
                 {/* Step 3 - Left Side */}
-                <div data-aos="slide-right" data-aos-duration="6000" className="mb-8 flex items-center w-full">
+                <div
+                    data-aos="slide-right"
+                    ata-aos-offset="300"
+                    data-aos-easing="ease-in-sine"
+                    data-aos-duration="4000"
+                    className="mb-8 flex items-center w-full"
+                >
                     <div className="w-1/2 pr-8 text-right">
                         <h3 className="text-xl font-semibold text-gray-800 mb-2">
                             Development and Testing
@@ -83,7 +104,13 @@ const Timeline: React.FC = () => {
                 </div>
 
                 {/* Step 4 - Right Side */}
-                <div data-aos="slide-left" data-aos-duration="8000" className="flex items-center w-full">
+                <div
+                    data-aos="slide-left"
+                    ata-aos-offset="300"
+                    data-aos-easing="ease-in-sine"
+                    data-aos-duration="6000"
+                    className="flex items-center w-full"
+                >
                     <div className="w-1/2"></div>
                     <div
                         className="relative max-w-[82px] sm:w-[70px] h-16 flex items-center justify-center bg-gradient-to-b from-purple-300 to-purple-600 text-white font-bold text-2xl rounded-full mx-auto"
