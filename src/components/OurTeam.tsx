@@ -40,7 +40,7 @@ const OurTeam: React.FC = () => {
             image: "/team/munna.png",
         },
         {
-            name: "Rownok Basunia",
+            name: "Rownok Bosunia",
             role: "Front-End Developer",
             responsibilities:
                 "Create and maintain visually appealing and responsive user interfaces using modern web technologies, ensuring optimal performance and user experience across devices.",
