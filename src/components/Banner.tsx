@@ -12,7 +12,7 @@ const Banner: React.FC = () => {
     }, []);
 
     return (
-        <div className="relative h-screen w-full flex flex-col lg:flex-row" style={{ backgroundImage: "url('/bg1.gif')" }}>
+        <div className="relative h-screen w-full flex flex-col lg:flex-row">
             {/* Content Section */}
             <div data-aos="slide-up" className="flex-1 flex items-center justify-center p-4 text-center text-white">
                 <div className="mt-20 md:mt-0">

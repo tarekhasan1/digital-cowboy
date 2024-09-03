@@ -79,16 +79,6 @@ const Footer: React.FC = () => {
                                     </span>{" "}
                                     hello@digitalcowboy.com.au
                                 </a>
-                                <br />
-                                <a
-                                    href="mailto:tarek@digitalcowboy.com.au"
-                                    className="text-orange-300 hover:text-orange-400"
-                                >
-                                    <span className="text-white text-opacity-80">
-                                        Email:
-                                    </span>{" "}
-                                    tarek@digitalcowboy.com.au
-                                </a>
                             </li>
                             <li>
                                 <span className="text-white text-opacity-80">
