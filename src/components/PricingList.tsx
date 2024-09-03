@@ -8,8 +8,8 @@ type PricingItem = {
 
 const pricingData: PricingItem[] = [
     {
-        title: "Basic Website Building",
-        price: "Starting from $500 + GST",
+        title: "Basic Website",
+        price: "Starting from $500 + 10%",
         description: [
             "Creation of a simple, yet professional website suitable for small businesses or personal use.",
             "Includes: Up to 5 pages (Home, About, Services, Blog, Contact), Responsive Design for Desktop and Mobile, Basic SEO Optimisation.",
@@ -18,7 +18,7 @@ const pricingData: PricingItem[] = [
         ],
     },
     {
-        title: "Advanced Website Building",
+        title: "Advanced Website",
         price: "Starting from $2,500",
         description: [
             "Development of a feature-rich website tailored for businesses with more complex needs.",
