@@ -12,39 +12,51 @@ const Navbar: React.FC = () => {
 
     const getLink = (item: any) => {
         switch (item.toLowerCase()) {
-          case 'home':
-            return '/';
-          case 'services':
-          case 'about':
-            return `/#${item.toLowerCase()}`;
-          case 'pricing':
-          case 'blog':
-            return `/${item.toLowerCase()}`;
-          default:
-            return '/'; // Fallback for any unhandled items
+            case "home":
+                return "/";
+            case "services":
+            case "about":
+                return `/#${item.toLowerCase()}`;
+            case "pricing":
+            case "blog":
+                return `/${item.toLowerCase()}`;
+            default:
+                return "/"; // Fallback for any unhandled items
         }
-      };
+    };
 
     return (
         <nav className="fixed z-50 w-full bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
-                        <Image src="/logo.png" width={80} height={30} alt="logo" className="w-[100px]"/>
+                        <Link href="/">
+                            <Image
+                                src="/logo.png"
+                                width={80}
+                                height={30}
+                                alt="logo"
+                                className="w-[100px]"
+                            />
+                        </Link>
                     </div>
                     <div className="hidden md:flex items-center">
                         <div className="ml-10 flex items-baseline space-x-6">
-                            {["Home", "About", "Services","Pricing", "Blog"].map(
-                                (item) => (
-                                    <Link
-                                        className="relative text-black hover:text-orange-700 px-4 py-2 rounded-lg text-lg font-semibold transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-                                        key={item}
-                                        href={getLink(item)}
-                                    >
-                                        {item}
-                                    </Link>
-                                )
-                            )}
+                            {[
+                                "Home",
+                                "About",
+                                "Services",
+                                "Pricing",
+                                "Blog",
+                            ].map((item) => (
+                                <Link
+                                    className="relative text-black hover:text-orange-700 px-4 py-2 rounded-lg text-lg font-semibold transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+                                    key={item}
+                                    href={getLink(item)}
+                                >
+                                    {item}
+                                </Link>
+                            ))}
                         </div>
                         <Link
                             className="ml-6 bg-orange-700 text-white hover:bg-white hover:text-orange-700 px-4 py-2 rounded-lg text-lg font-semibold transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 hidden md:inline-block"
@@ -89,7 +101,7 @@ const Navbar: React.FC = () => {
             {isOpen && (
                 <div className="md:hidden">
                     <div className="px-2 pt-2 pb-6 space-y-1 sm:px-3 bg-orange-700 shadow-lg">
-                        {["Home", "About", "Services","Pricing", "Blog"].map(
+                        {["Home", "About", "Services", "Pricing", "Blog"].map(
                             (item) => (
                                 <Link
                                     onClick={() => setIsOpen(false)}

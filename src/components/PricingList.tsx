@@ -12,9 +12,9 @@ const pricingData: PricingItem[] = [
         price: "Starting from $500 + GST",
         description: [
             "Creation of a simple, yet professional website suitable for small businesses or personal use.",
-            "Includes: Up to 5 pages (Home, About, Services, Blog, Contact), Responsive Design for Desktop and Mobile, Basic SEO Optimization.",
+            "Includes: Up to 5 pages (Home, About, Services, Blog, Contact), Responsive Design for Desktop and Mobile, Basic SEO Optimisation.",
             "Easy-to-use content management system for self-updates.",
-            "Customizable design to reflect your brand identity.",
+            "Customisable design to reflect your brand identity.",
         ],
     },
     {
@@ -22,7 +22,7 @@ const pricingData: PricingItem[] = [
         price: "Starting from $2,500",
         description: [
             "Development of a feature-rich website tailored for businesses with more complex needs.",
-            "Includes: Up to 15 pages, Advanced Functionality (e.g., interactive elements, custom forms), E-Commerce Capabilities, Enhanced SEO Optimization, Performance Tuning.",
+            "Includes: Up to 15 pages, Advanced Functionality (e.g., interactive elements, custom forms), E-Commerce Capabilities, Enhanced SEO Optimisation, Performance Tuning.",
             "Responsive Design for all devices and browsers.",
             "Integration with third-party services and custom analytics.",
         ],
@@ -42,8 +42,8 @@ const pricingData: PricingItem[] = [
         price: "Starting from $9,500",
         description: [
             "Development of scalable and robust web solutions for large enterprises.",
-            "Includes: Custom Web Application Development, Integration with Enterprise Systems, Security Enhancements, and Performance Optimization.",
-            "Tailored to meet the specific needs and workflows of your organization.",
+            "Includes: Custom Web Application Development, Integration with Enterprise Systems, Security Enhancements, and Performance Optimisation.",
+            "Tailored to meet the specific needs and workflows of your organisation.",
             "Ongoing support and maintenance options available.",
         ],
     },
@@ -53,7 +53,7 @@ const pricingData: PricingItem[] = [
         description: [
             "Revamp your existing website with a modern design and improved functionality.",
             "Includes: UI/UX Overhaul, Enhanced Navigation, Updated Content Layout, and Visual Elements.",
-            "Optimized for all devices and built with best practices in SEO.",
+            "Optimised for all devices and built with best practices in SEO.",
             "Aims to improve user experience and engagement.",
         ],
     },
@@ -150,27 +150,27 @@ const pricingData: PricingItem[] = [
             "How to manage a shop",
         ],
     },
-    {
-        title: "Website Hosting",
-        price: "$155",
-        description: [
-            "Business Standard 10 GB Hosting 10GB Monthly Bandwidth",
-            "Website Hosting with Auto SSL",
-            "Daily Off Site Back Up",
-            "Immunify Security",
-            "Litespeed Cache",
-            "Server Management",
-        ],
-    },
-    {
-        title: "Plugin Licenses and Software Updates",
-        price: "$220",
-        description: [
-            "WordPress Plugin Licenses and WordPress/Plugin Update Management.",
-            "Includes Essential Addons, Gravity Forms, Smush Pro, Elementor Pro, SmartCrawl Pro",
-            "One Month Free Licenses included from commencement of site design. Billed Annually",
-        ],
-    },
+    // {
+    //     title: "Website Hosting",
+    //     price: "$155",
+    //     description: [
+    //         "Business Standard 10 GB Hosting 10GB Monthly Bandwidth",
+    //         "Website Hosting with Auto SSL",
+    //         "Daily Off Site Back Up",
+    //         "Immunify Security",
+    //         "Litespeed Cache",
+    //         "Server Management",
+    //     ],
+    // },
+    // {
+    //     title: "Plugin Licenses and Software Updates",
+    //     price: "$220",
+    //     description: [
+    //         "WordPress Plugin Licenses and WordPress/Plugin Update Management.",
+    //         "Includes Essential Addons, Gravity Forms, Smush Pro, Elementor Pro, SmartCrawl Pro",
+    //         "One Month Free Licenses included from commencement of site design. Billed Annually",
+    //     ],
+    // },
 ];
 
 const PricingList: React.FC = () => {
