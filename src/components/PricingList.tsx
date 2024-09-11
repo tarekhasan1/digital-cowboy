@@ -57,16 +57,16 @@ const pricingData: PricingItem[] = [
             "Aims to improve user experience and engagement.",
         ],
     },
-    {
-        title: "Functionality & Integrations",
-        price: "$1,000",
-        description: [
-            "Add advanced functionalities and integrate third-party services to enhance your website or application.",
-            "Includes: Custom Feature Development, API Integrations, and Workflow Automation.",
-            "Ensures seamless operation and data flow between systems.",
-            "Enhances user experience with advanced features and connectivity.",
-        ],
-    },
+    // {
+    //     title: "Functionality & Integrations",
+    //     price: "$1,000",
+    //     description: [
+    //         "Add advanced functionalities and integrate third-party services to enhance your website or application.",
+    //         "Includes: Custom Feature Development, API Integrations, and Workflow Automation.",
+    //         "Ensures seamless operation and data flow between systems.",
+    //         "Enhances user experience with advanced features and connectivity.",
+    //     ],
+    // },
     {
         title: "API Integrations",
         price: "Starting from $600",

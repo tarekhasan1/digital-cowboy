@@ -34,6 +34,14 @@ const FeaturedProjects: React.FC = () => {
             projectUrl: "https://www.nqfishingadventures.com", // Replace with actual project link
             technologies: ["Nextjs", "TailwindCSS", "TypeScript", "Stripe", "MongoDB"], // List of technologies used
         },
+        {
+            title: "Tap A Deal",
+            description:
+                "Introducing TAP A DEAL: Built for Performance and Local Excellence TAP A DEAL is crafted with cutting-edge technology to deliver a seamless, high-performance experience for Townsville. As a developer-driven project, it leverages the latest advancements to ensure fast, reliable, and intuitive access to local deals, events, and resources. Why TAP A DEAL Excels: Advanced Technology: Developed using the latest tech stack for speed and efficiency, TAP A DEAL offers a smooth, responsive experience across all devices. Local Focus: Designed with deep insights into Townsville’s unique needs, our platform connects you with the best local offers and relevant information. High Performance: Optimized for quick load times and seamless navigation, ensuring you get the information you need without delay. Reliability: Built with robust security and reliability features to provide a trustworthy and consistent user experience.",
+            imageUrl: "/projects/tapdeal-min.png", // Replace with actual image path
+            projectUrl: "https://www.tapadeal.com.au", // Replace with actual project link
+            technologies: ["Nextjs", "TailwindCSS", "TypeScript"], // List of technologies used
+        },
         // Add more projects as needed
     ];
 
@@ -66,7 +74,6 @@ const FeaturedProjects: React.FC = () => {
                     {/* Project Details */}
                     <div
                         data-aos="fade-left"
-                        data-aos-offset="300"
                         data-aos-easing="ease-in-sine"
                         className="w-full md:w-1/2 p-8"
                     >

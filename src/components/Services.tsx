@@ -12,12 +12,12 @@ const Services: React.FC = () => {
     }, []);
 
     const services = [
-        {
-            title: "Digital Products",
-            description:
-                "We turn ideas into immersive digital experiences, seamlessly blending aesthetics and functionality to transform your vision into compelling digital realities.",
-            image: "/services/digital-product.png", // Add image URL
-        },
+        // {
+        //     title: "Digital Products",
+        //     description:
+        //         "We turn ideas into immersive digital experiences, seamlessly blending aesthetics and functionality to transform your vision into compelling digital realities.",
+        //     image: "/services/digital-product.png", // Add image URL
+        // },
         {
             title: "Software Development",
             description:
@@ -36,18 +36,18 @@ const Services: React.FC = () => {
                 "We build innovative, user-friendly apps with seamless experiences across platforms, creating apps that stand out in a crowded market.",
             image: "/services/app-dev.jpg",
         },
-        {
-            title: "Customer Relationship Management (CRM)",
-            description:
-                "Our tailored CRM solutions empower you to build lasting relationships, drive sales, and enhance customer satisfaction with advanced analytics and automation.",
-            image: "/services/crm.png",
-        },
-        {
-            title: "Enterprise Resource Planning (ERP)",
-            description:
-                "Streamline operations and enhance efficiency with our tailored ERP solutions, driving informed decision-making and scalability.",
-            image: "/services/erp.png",
-        },
+        // {
+        //     title: "Customer Relationship Management (CRM)",
+        //     description:
+        //         "Our tailored CRM solutions empower you to build lasting relationships, drive sales, and enhance customer satisfaction with advanced analytics and automation.",
+        //     image: "/services/crm.png",
+        // },
+        // {
+        //     title: "Enterprise Resource Planning (ERP)",
+        //     description:
+        //         "Streamline operations and enhance efficiency with our tailored ERP solutions, driving informed decision-making and scalability.",
+        //     image: "/services/erp.png",
+        // },
         {
             title: "Web Consultation and Strategy",
             description:
