@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Digital Cowboy",
-  description: "Digital Solutions with a Maverick’s Edge.",
+  description: "Your partner in the digital frontier.",
 };
 
 export default function RootLayout({
@@ -18,6 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta name="google-site-verification" content="j1p4ekYU6LmzxOzBBmnjRZADcx8CHpwo-RYsznz2N14" />
       <body className={inter.className}>
         <Navbar/>
         {children}
