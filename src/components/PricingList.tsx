@@ -136,7 +136,7 @@ const PricingList: React.FC = () => {
             </h1>
             <p className="max-w-5xl mx-auto text-sm md:text-base text-gray-300 text-center mb-12">
                 We offer tailored packages based on your needs and budget.
-                Whether you're after a simple website or a complex app, we'll
+                Whether you are after a simple website or a complex app, we will
                 work with you to create the perfect solution. <br /><br />
                 <strong className="text-white">
                     Contact us today to chat about your project and receive a
