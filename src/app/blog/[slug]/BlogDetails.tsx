@@ -108,8 +108,8 @@ const BlogDetails = () => {
     <section className="bg-black text-white py-20 px-6 md:px-16">
       <div className="max-w-7xl mx-auto mt-[50px]">
         <h1 className="text-4xl font-bold text-center mb-8">{post.title}</h1>
-        <div className="flex justify-center mb-8">
-          <Image width={600} height={400} src={post.image} alt={post.title} className="rounded-xl max-w-2xl" />
+        <div className="flex justify-center mb-8 w-full">
+          <Image width={600} height={400} src={post.image} alt={post.title} className="rounded-xl w-full object-cover" />
         </div>
         <div className="prose text-lg">
           {renderContent(post.content)}
