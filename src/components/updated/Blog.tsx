@@ -11,7 +11,7 @@ const blogPosts = [
     slug: "why-every-business-needs-a-website",
   },
   {
-    title: "5 Signs It’s Time to Redesign Your Website",
+    title: "5 Signs It's Time to Redesign Your Website",
     excerpt:
       "Is your website looking outdated or loading slowly? Here are the key signs it might be time for a refresh.",
     image: "/blogs/website-redesign.jpg",

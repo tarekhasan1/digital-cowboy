@@ -113,7 +113,7 @@ const pricingData: PricingItem[] = [
         price: "$690",
         description: [
             "3 months of SEO tracking and support.",
-            "We’ll review your site, suggest improvements, and implement key updates.",
+            "We will review your site, suggest improvements, and implement key updates.",
             "Monthly progress reports to track keyword rankings.",
         ],
     },
