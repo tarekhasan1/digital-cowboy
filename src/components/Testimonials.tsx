@@ -63,9 +63,9 @@ const Testimonials: React.FC = () => {
                     width={100}
                     height={100}
                 />
-                <p className="my-5 text-center">{title}</p>
+                <p className="my-5 text-center text-gray-200">{title}</p>
                 <div className="absolute bottom-5 right-5">
-                    <p className="font-bold">Client.</p>
+                    <p className="font-bold text-gray-300">Client.</p>
                     <p>{type}</p>
                 </div>
             </div>
@@ -73,8 +73,8 @@ const Testimonials: React.FC = () => {
     );
 
     return (
-        <section className="mt-14">
-            <h1 className="text-center text-gray-600 text-2xl md:text-4xl mb-12 font-bold">
+        <section className="my-14">
+            <h1 className="text-center text-gray-100 text-2xl md:text-4xl mb-12 font-bold">
                 Clients Say
             </h1>
             <div className="relative">

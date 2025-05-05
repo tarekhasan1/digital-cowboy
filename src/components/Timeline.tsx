@@ -11,17 +11,17 @@ const Timeline: React.FC = () => {
     }, []);
     return (
         <div
-            className="max-w-4xl mx-auto px-4 py-8"
-            style={{ backgroundImage: "url('/bg6.gif')" }}
+            className="max-w-4xl mx-auto px-4 py-8 bg-black"
+            // style={{ backgroundImage: "url('/bg6.gif')" }}
         >
-            <h1 className="text-center text-gray-600 text-2xl md:text-4xl mb-12 font-bold">
+            <h1 className="text-center text-gray-100 text-2xl md:text-4xl mb-12 font-bold">
                 Work Process
             </h1>
             <div className="relative">
                 {/* Vertical Dashed Line */}
                 <div
-                    className="absolute left-1/2 transform -translate-x-1/2 w-px border-l-2 border-dashed border-gray-300"
-                    style={{ top: "40px", bottom: "40px" }}
+                    className="absolute left-1/2 transform -translate-x-1/2 w-px border-l-2 border-dashed border-gray-300 top-[55px] bottom-[70px] sm:top-[40px] sm:bottom-[40px]"
+                    // style={{ top: "40px", bottom: "40px" }}
                 ></div>
 
                 {/* Step 1 - Left Side */}
@@ -32,10 +32,10 @@ const Timeline: React.FC = () => {
                     className="mb-8 flex items-center w-full"
                 >
                     <div className="w-1/2 pr-8 text-right">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                        <h3 className="text-base md:text-xl font-semibold text-gray-100 mb-2">
                             Project Scoping
                         </h3>
-                        <p className="text-gray-600 text-xs md:text-base">
+                        <p className="text-gray-200 text-xs md:text-base">
                             The process of defining the scope, goals, timeline,
                             and resources required for a new IT project or
                             service.
@@ -65,10 +65,10 @@ const Timeline: React.FC = () => {
                         2
                     </div>
                     <div className="w-1/2 pl-8 text-left">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                        <h3 className="text-base md:text-xl font-semibold text-gray-100 mb-2">
                             Planning and Design
                         </h3>
-                        <p className="text-gray-600 text-xs md:text-base">
+                        <p className="text-gray-200 text-xs md:text-base">
                             The process of designing the architecture, software,
                             and hardware required to implement the project or
                             service.
@@ -85,10 +85,10 @@ const Timeline: React.FC = () => {
                     className="mb-8 flex items-center w-full"
                 >
                     <div className="w-1/2 pr-8 text-right">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                        <h3 className="text-base md:text-xl font-semibold text-gray-100 mb-2">
                             Development and Testing
                         </h3>
-                        <p className="text-gray-600 text-xs md:text-base">
+                        <p className="text-gray-200 text-xs md:text-base">
                             The process of coding, developing, and testing the
                             software and hardware components required for the
                             project or service.
@@ -119,10 +119,10 @@ const Timeline: React.FC = () => {
                         4
                     </div>
                     <div className="w-1/2 pl-8 text-left">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                        <h3 className="text-base md:text-xl font-semibold text-gray-100 mb-2">
                             Maintenance and Support
                         </h3>
-                        <p className="text-gray-600 text-xs md:text-base">
+                        <p className="text-gray-200 text-xs md:text-base">
                             The ongoing process of maintaining and updating the
                             software and hardware components, providing
                             technical support.

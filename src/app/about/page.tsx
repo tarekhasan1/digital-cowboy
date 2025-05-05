@@ -1,10 +1,10 @@
-import Blog from '@/components/updated/Blog';
+import About from '@/components/updated/About';
 import React from 'react';
 
 const page = () => {
     return (
         <div>
-            <Blog/>
+            <About/>
         </div>
     );
 };

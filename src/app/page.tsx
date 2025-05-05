@@ -1,28 +1,27 @@
 import AboutUs from "@/components/AboutUs";
-import Banner from "@/components/Banner";
 import ContactUs from "@/components/ContactUs";
 import FeaturedProject from "@/components/FeaturedProject";
 import OurTeam from "@/components/OurTeam";
 import PricingPlan from "@/components/PricingPlan";
-import Services from "@/components/Services";
 import StatsSection from "@/components/StatsSection";
 import Testimonials from "@/components/Testimonials";
 import Timeline from "@/components/Timeline";
+import Banner from "@/components/updated/Banner";
+import GlowUpSection from "@/components/updated/GlowUpSection";
+import NoGeekSpeak from "@/components/updated/NoGeekSpeak";
+import Services from "@/components/updated/Services";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex flex-col justify-center items-center overflow-hidden" style={{ backgroundImage: "url('/bg5.gif')" }}>
+    <main className="flex flex-col font-serif justify-center items-center bg-black overflow-hidden">
       <Banner/>
-      {/* <AboutUs/> */}
-      {/* <StatsSection/> */}
+      <NoGeekSpeak/>
       <Services/>
+      <GlowUpSection/>
       <Timeline/>
       <FeaturedProject/>
-      <PricingPlan/>
-      {/* <OurTeam/> */}
       <Testimonials/>
-      <ContactUs/>
     </main>
   );
 }

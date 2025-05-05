@@ -1,10 +1,10 @@
-import Blog from '@/components/updated/Blog';
 import React from 'react';
+import BlogDetails from './BlogDetails';
 
 const page = () => {
     return (
         <div>
-            <Blog/>
+            <BlogDetails/>
         </div>
     );
 };
