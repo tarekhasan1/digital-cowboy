@@ -109,7 +109,7 @@ const BlogDetails = () => {
       <div className="max-w-7xl mx-auto mt-[50px]">
         <h1 className="text-4xl font-bold text-center mb-8">{post.title}</h1>
         <div className="flex justify-center mb-8 w-full">
-          <Image width={600} height={400} src={post.image} alt={post.title} className="rounded-xl w-full object-cover" />
+          <Image width={600} height={400} src={post.image} alt={post.title} className="rounded-xl w-full md:w-1/2 object-cover" />
         </div>
         <div className="prose text-lg">
           {renderContent(post.content)}
