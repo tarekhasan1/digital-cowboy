@@ -143,13 +143,13 @@ const FeaturedProjects: React.FC = () => {
                 {/* Arrows */}
                 <button
                     onClick={() => scroll("left")}
-                    className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full p-3 z-10"
+                    className="absolute hidden md:block left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full p-3 z-10"
                 >
                     <FaArrowLeft />
                 </button>
                 <button
                     onClick={() => scroll("right")}
-                    className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full p-3 z-10"
+                    className="absolute hidden md:block right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full p-3 z-10"
                 >
                     <FaArrowRight />
                 </button>
