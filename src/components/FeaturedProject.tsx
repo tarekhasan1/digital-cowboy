@@ -56,7 +56,7 @@ const FeaturedProjects: React.FC = () => {
                 "TSV Alterations & Formal Wear delivers a professional online presence for a trusted Townsville-based tailoring service. The website highlights alteration offerings, formal wear rentals, and appointment booking, all within a stylish, easy-to-navigate layout. Optimized for mobile users, the site includes a detailed service guide, customer testimonials, and quick contact forms to streamline client engagement.",
             imageUrl: "/projects/tsvalteration-min.png",
             logoUrl: "",
-            projectUrl: "https://www.tsvalterationsandformalwear.com.au",
+            projectUrl: "https://www.tsvalterationsandformalwear.com",
             technologies: ["Next.js", "TailwindCSS", "TypeScript", "Firebase"],
         },
         {
