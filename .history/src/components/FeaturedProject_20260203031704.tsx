@@ -277,48 +277,47 @@ const projects = [
                 </div>
 
                 {/* Project Thumbnails */}
-               <motion.div
-    className="max-w-3xl mx-auto grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1.5"
-    initial={{ opacity: 0, y: 10 }}
+                <motion.div
+    className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3"
+    initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-20px" }}
-    transition={{ duration: 0.2 }}
+    viewport={{ once: true, margin: "-30px" }}
+    transition={{ duration: 0.3 }}
 >
     {projects.map((project, idx) => (
         <motion.button
             key={idx}
             onClick={() => setSelectedIndex(idx)}
-            className={`group relative overflow-hidden rounded-md border transition-all duration-150 ${
+            className={`group relative overflow-hidden rounded-md sm:rounded-lg border transition-all duration-200 ${
                 selectedIndex === idx
-                    ? "border-[#A1D9B0] scale-105 shadow-sm ring-1 ring-[#A1D9B0]"
-                    : "border-gray-700 hover:border-gray-600"
+                    ? "border-[#A1D9B0] scale-[1.02] shadow-md"
+                    : "border-gray-600 hover:border-gray-500"
             }`}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: idx * 0.01 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.03 }}
         >
-            {/* Square container with minimal height */}
-            <div className="aspect-square bg-gray-900/50 flex items-center justify-center p-1.5">
-                {project.logoUrl ? (
+            {project.logoUrl ? (
+                <div className="aspect-square bg-gray-900 p-2 sm:p-3 flex items-center justify-center">
                     <Image
                         src={project.logoUrl}
                         alt={project.title}
-                        width={32}
-                        height={32}
-                        className="object-contain w-6 h-6 sm:w-8 sm:h-8"
+                        width={50}
+                        height={50}
+                        className="object-contain w-10 h-10 sm:w-12 sm:h-12"
                     />
-                ) : (
-                    <span className="text-xs text-gray-400 font-medium">
-                        {idx + 1}
-                    </span>
-                )}
-            </div>
-            
-            {/* Active/Hover overlay */}
+                </div>
+            ) : (
+                <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-2">
+                    <p className="text-xs text-gray-300 text-center font-medium px-1">
+                        {project.title}
+                    </p>
+                </div>
+            )}
             <div
-                className={`absolute inset-0 bg-[#A1D9B0] opacity-0 group-hover:opacity-5 transition-opacity ${
+                className={`absolute inset-0 bg-[#A1D9B0] opacity-0 group-hover:opacity-10 transition-opacity ${
                     selectedIndex === idx ? "opacity-10" : ""
                 }`}
             />

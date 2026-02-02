@@ -14,7 +14,7 @@ const projects = [
         description:
             "Hat Business is a playful children’s podcast platform filled with imaginative stories and adventures that inspire curiosity, courage, and creativity. It offers episodes packed with fun narratives and calming routines for young listeners and families.",
         imageUrl: "/projects/hatbusiness-min.png",
-        logoUrl: "/projects/logos/hatbusiness.png",
+        logoUrl: "/projects/logos/hatbusiness-logo.png",
         projectUrl: "https://www.hatbusiness.com.au",
         technologies: ["NextJs","TypeScript", 
             "Framer Motion", "Firebase", "Firestore NoSQL Database" ,"Responsive Web", "Custom Audio Streaming"],
@@ -24,7 +24,7 @@ const projects = [
         description:
             "BWG Colman Radio is a community-focused radio station broadcasting from Palm Island, Australia. The site offers live streaming of local news, music, and Indigenous content at 97.3 FM for its audience.",
         imageUrl: "/projects/bwgcolmanradio-min.png",
-        logoUrl: "/projects/logos/bwgcolman-logo.png",
+        logoUrl: "/projects/logos/bwgcolmanradio-logo.png",
         projectUrl: "https://www.bwgcolmanradio.com.au",
         technologies: ["Live Stream", "Community Radio Web", "Responsive Design"],
     },
@@ -33,7 +33,7 @@ const projects = [
         description:
             "SPOTTO! is an online interactive platform where users can keep score, settle arguments, and compete in fun challenges with friends, crowned by an ultimate SPOTTO champion system.",
         imageUrl: "/projects/spotto-min.png",
-        logoUrl: "/projects/logos/spotto.jpeg",
+        logoUrl: "/projects/logos/spotto-logo.png",
         projectUrl: "https://www.spotto.online",
         technologies: ["Interactive Web App", "Real-Time Scoring", "Responsive UI"],
     },
@@ -64,6 +64,15 @@ const projects = [
         logoUrl: "/projects/logos/tapadeal-logo.png",
         projectUrl: "https://www.tapadeal.com.au",
         technologies: ["Nextjs", "TailwindCSS", "TypeScript"],
+    },
+    {
+        title: "She Said What?!",
+        description:
+            "She Said What?! is a bold and engaging podcast platform that dives into real conversations, trending topics, and powerful female voices. Built with performance and user experience in mind.",
+        imageUrl: "/projects/shesaidwhatpodcast-min.png",
+        logoUrl: "/projects/logos/shesaidwhat-logo.png",
+        projectUrl: "https://www.shesaidwhat.au",
+        technologies: ["Next.js", "TailwindCSS", "TypeScript", "Firebase"],
     },
     {
         title: "TSV Alterations & Formal Wear",
@@ -125,7 +134,7 @@ const projects = [
                     <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[#A1D9B0] to-white bg-clip-text text-transparent">
                         Featured Projects
                     </h2>
-                    <p className="text-gray-400 text-lg">Showcasing our recent work</p>
+                    <p className="text-gray-400 text-lg">Showcasing our best work</p>
                 </motion.div>
 
                 {/* Main Project Display */}
@@ -182,7 +191,7 @@ const projects = [
                                     </motion.div>
 
                                     <motion.p
-                                        className="text-gray-300 text-xs md:text-base mb-8 leading-relaxed"
+                                        className="text-gray-300 text-base md:text-lg mb-8 leading-relaxed"
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.3 }}
@@ -198,7 +207,7 @@ const projects = [
                                     >
                                         <div className="flex items-center gap-2 mb-4">
                                             <Code className="w-5 h-5 text-[#A1D9B0]" />
-                                            <h4 className="text-xs font-semibold text-gray-200">
+                                            <h4 className="text-xl font-semibold text-gray-200">
                                                 Technologies
                                             </h4>
                                         </div>
@@ -206,7 +215,7 @@ const projects = [
                                             {selectedProject.technologies.map((tech, idx) => (
                                                 <motion.span
                                                     key={idx}
-                                                    className="px-4 py-2 text-xs bg-gray-800 text-gray-300 rounded-full font-medium border border-gray-700"
+                                                    className="px-4 py-2 bg-gray-800 text-gray-300 rounded-full text-sm font-medium border border-gray-700"
                                                     initial={{ opacity: 0, scale: 0.8 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     transition={{ delay: 0.5 + idx * 0.1 }}
@@ -222,7 +231,7 @@ const projects = [
                                         href={selectedProject.projectUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group inline-flex items-center gap-2 bg-[#A1D9B0] text-black px-4 py-2 rounded-lg font-bold text-base hover:bg-[#8bc99f] transition-all duration-300 overflow-hidden relative"
+                                        className="group inline-flex items-center gap-2 bg-[#A1D9B0] text-black px-8 py-4 rounded-lg font-bold text-lg hover:bg-[#8bc99f] transition-all duration-300 overflow-hidden relative"
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.6 }}
@@ -277,54 +286,53 @@ const projects = [
                 </div>
 
                 {/* Project Thumbnails */}
-               <motion.div
-    className="max-w-3xl mx-auto grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1.5"
-    initial={{ opacity: 0, y: 10 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-20px" }}
-    transition={{ duration: 0.2 }}
->
-    {projects.map((project, idx) => (
-        <motion.button
-            key={idx}
-            onClick={() => setSelectedIndex(idx)}
-            className={`group relative overflow-hidden rounded-md border transition-all duration-150 ${
-                selectedIndex === idx
-                    ? "border-[#A1D9B0] scale-105 shadow-sm ring-1 ring-[#A1D9B0]"
-                    : "border-gray-700 hover:border-gray-600"
-            }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: idx * 0.01 }}
-        >
-            {/* Square container with minimal height */}
-            <div className="aspect-square bg-gray-900/50 flex items-center justify-center p-1.5">
-                {project.logoUrl ? (
-                    <Image
-                        src={project.logoUrl}
-                        alt={project.title}
-                        width={32}
-                        height={32}
-                        className="object-contain w-6 h-6 sm:w-8 sm:h-8"
-                    />
-                ) : (
-                    <span className="text-xs text-gray-400 font-medium">
-                        {idx + 1}
-                    </span>
-                )}
-            </div>
-            
-            {/* Active/Hover overlay */}
-            <div
-                className={`absolute inset-0 bg-[#A1D9B0] opacity-0 group-hover:opacity-5 transition-opacity ${
-                    selectedIndex === idx ? "opacity-10" : ""
-                }`}
-            />
-        </motion.button>
-    ))}
-</motion.div>
+                <motion.div
+                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                    {projects.map((project, idx) => (
+                        <motion.button
+                            key={idx}
+                            onClick={() => setSelectedIndex(idx)}
+                            className={`group relative overflow-hidden rounded-xl border-2 transition-all duration-300 ${
+                                selectedIndex === idx
+                                    ? "border-[#A1D9B0] scale-105"
+                                    : "border-gray-700 hover:border-gray-600"
+                            }`}
+                            whileHover={{ y: -5 }}
+                            whileTap={{ scale: 0.95 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                        >
+                            {project.logoUrl ? (
+                                <div className="aspect-square bg-gray-900 p-4 flex items-center justify-center">
+                                    <Image
+                                        src={project.logoUrl}
+                                        alt={project.title}
+                                        width={80}
+                                        height={80}
+                                        className="object-contain"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-4">
+                                    <p className="text-xs text-gray-300 text-center font-semibold">
+                                        {project.title}
+                                    </p>
+                                </div>
+                            )}
+                            <div
+                                className={`absolute inset-0 bg-[#A1D9B0] opacity-0 group-hover:opacity-10 transition-opacity ${
+                                    selectedIndex === idx ? "opacity-20" : ""
+                                }`}
+                            />
+                        </motion.button>
+                    ))}
+                </motion.div>
             </div>
         </section>
     );
