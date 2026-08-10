@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Home, Mail, LogOut, User, Shield } from 'lucide-react';
+import { Home, Mail, LogOut, User, Shield, BarChart3, FileText, MessageSquare, Zap, Settings, ChevronDown } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   DropdownMenu,
@@ -122,26 +122,26 @@ function AdminContent({ children }: { children: React.ReactNode }) {
   // Show loading skeleton
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="min-h-screen bg-background">
+        <header className="bg-white/5 border-b border-white/10 sticky top-0 z-50 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-6">
-                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-6 w-32 bg-white/10" />
                 <nav className="hidden md:flex items-center gap-4">
-                  <Skeleton className="h-9 w-24" />
-                  {isEmailVARoute && <Skeleton className="h-9 w-24" />}
+                  <Skeleton className="h-9 w-24 bg-white/10" />
+                  {isEmailVARoute && <Skeleton className="h-9 w-24 bg-white/10" />}
                 </nav>
               </div>
               <div className="flex items-center gap-4">
-                <Skeleton className="h-9 w-24" />
-                <Skeleton className="h-9 w-24" />
+                <Skeleton className="h-9 w-24 bg-white/10" />
+                <Skeleton className="h-9 w-24 bg-white/10" />
               </div>
             </div>
           </div>
         </header>
         <div className="max-w-7xl mx-auto p-6">
-          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-64 w-full bg-white/10 rounded-2xl" />
         </div>
       </div>
     );
@@ -152,62 +152,91 @@ function AdminContent({ children }: { children: React.ReactNode }) {
     return null;
   }
 
+  const modules = [
+    { name: 'Inbox', icon: <Mail className="w-4 h-4 mr-2" />, href: '/admin/inbox' },
+    { name: 'CRM Contacts', icon: <User className="w-4 h-4 mr-2" />, href: '/admin/crm' },
+    { name: 'Campaigns', icon: <MessageSquare className="w-4 h-4 mr-2" />, href: '/admin/campaigns' },
+    { name: 'Automations', icon: <Zap className="w-4 h-4 mr-2" />, href: '/admin/automations' },
+    { name: 'Analytics', icon: <BarChart3 className="w-4 h-4 mr-2" />, href: '/admin/analytics' },
+    { name: 'Content', icon: <FileText className="w-4 h-4 mr-2" />, href: '/admin/content' },
+    { name: 'Settings', icon: <Settings className="w-4 h-4 mr-2" />, href: '/admin/settings' },
+  ];
+
+  const activeModule = modules.find(m => pathname?.startsWith(m.href));
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background text-white">
       {/* Admin Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white/5 border-b border-white/10 sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <Link href="/admin" className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-blue-600" />
-                <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
+              <Link href="/admin" className="flex items-center gap-2 group">
+                <div className="bg-primary/20 p-2 rounded-lg group-hover:bg-primary/30 transition-colors">
+                  <Shield className="w-5 h-5 text-primary" />
+                </div>
+                <h1 className="text-xl font-bold text-white tracking-tight">Admin<span className="text-white/50">Panel</span></h1>
               </Link>
-              <nav className="hidden md:flex items-center gap-4">
+              <nav className="hidden md:flex items-center gap-2 border-l border-white/10 pl-6 ml-2">
                 <Link href="/admin">
                   <Button
-                    variant={pathname === '/admin' ? 'default' : 'ghost'}
+                    variant={pathname === '/admin' ? 'secondary' : 'ghost'}
                     size="sm"
+                    className={pathname === '/admin' ? 'bg-white/10 text-white' : 'text-white/70 hover:text-white hover:bg-white/5'}
                   >
                     <Home className="w-4 h-4 mr-2" />
                     Dashboard
                   </Button>
                 </Link>
-                {isEmailVARoute && (
-                  <Link href="/admin/email-va">
-                    <Button
-                      variant={pathname === '/admin/email-va' ? 'default' : 'ghost'}
-                      size="sm"
-                    >
-                      <Mail className="w-4 h-4 mr-2" />
-                      Email VA
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant={activeModule ? 'secondary' : 'ghost'} size="sm" className={activeModule ? 'bg-white/10 text-white' : 'text-white/70 hover:text-white hover:bg-white/5'}>
+                      {activeModule ? (
+                        <>
+                          {activeModule.icon}
+                          {activeModule.name}
+                        </>
+                      ) : (
+                        <>Modules</>
+                      )}
+                      <ChevronDown className="w-4 h-4 ml-2 opacity-50" />
                     </Button>
-                  </Link>
-                )}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-48 bg-zinc-900 border-white/10 text-white">
+                    {modules.map((module) => (
+                      <Link key={module.name} href={module.href}>
+                        <DropdownMenuItem className="cursor-pointer focus:bg-white/10 transition-colors">
+                          {module.icon}
+                          {module.name}
+                        </DropdownMenuItem>
+                      </Link>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </nav>
             </div>
             <div className="flex items-center gap-4">
               {/* User dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white text-sm font-medium">
+                  <Button variant="ghost" size="sm" className="gap-3 hover:bg-white/5 text-white/90">
+                    <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className="hidden md:inline">{user.name}</span>
-                    <User className="w-4 h-4 hidden md:inline" />
+                    <span className="hidden md:inline font-medium">{user.name}</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-white/10 text-white">
                   <DropdownMenuLabel>
                     <div className="flex flex-col">
                       <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-gray-500">{user.email}</p>
-                      <p className="text-xs text-gray-400 mt-1 capitalize">{user.role}</p>
+                      <p className="text-sm text-white/50">{user.email}</p>
+                      <p className="text-xs text-primary mt-1 capitalize font-medium">{user.role}</p>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logout} className="cursor-pointer text-red-600 focus:text-red-600">
+                  <DropdownMenuSeparator className="bg-white/10" />
+                  <DropdownMenuItem onClick={logout} className="cursor-pointer text-red-400 focus:text-red-300 focus:bg-red-400/10 hover:bg-red-400/10 transition-colors">
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
                   </DropdownMenuItem>
@@ -215,8 +244,8 @@ function AdminContent({ children }: { children: React.ReactNode }) {
               </DropdownMenu>
               
               <Link href="/">
-                <Button variant="outline" size="sm">
-                  Back to Website
+                <Button variant="outline" size="sm" className="border-white/10 hover:bg-white/10 hover:text-white text-white/70">
+                  Exit to Website
                 </Button>
               </Link>
             </div>

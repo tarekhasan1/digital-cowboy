@@ -7,6 +7,7 @@ interface SendEmailParams {
   html: string;
   text?: string;
   replyTo?: string;
+  headers?: Record<string, string>;
 }
 
 interface InboundEmail {
@@ -51,6 +52,7 @@ class ResendService {
         html: params.html,
         text: params.text || this.htmlToText(params.html),
         ...(params.replyTo && { replyTo: params.replyTo }),
+        ...(params.headers && { headers: params.headers }),
       });
 
       if (error) {

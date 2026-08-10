@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revokeSession } from '@/lib/email-va/auth/firebase-session';
 import { adminAuth, logAuditEvent } from '@/lib/email-va/firebase-admin';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const sessionCookie = request.cookies.get('session')?.value;

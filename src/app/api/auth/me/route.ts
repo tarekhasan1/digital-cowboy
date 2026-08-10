@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateRequest } from '@/lib/email-va/auth/firebase-session';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const validation = await validateRequest(request);

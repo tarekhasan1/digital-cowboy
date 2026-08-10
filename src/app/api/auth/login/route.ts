@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RateLimiter, verifyFirebaseToken } from '../../../../../lib/email-va/auth/firebase-auth';
 import { createSessionCookie } from '../../../../../lib/email-va/auth/firebase-session';
 
+export const dynamic = 'force-dynamic';
+
 const rateLimiter = new RateLimiter();
 
 export async function POST(request: NextRequest) {

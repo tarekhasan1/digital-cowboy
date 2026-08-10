@@ -6,9 +6,18 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-    // Add this to allow jsonwebtoken in server components
+  // Add this to allow jsonwebtoken in server components
   experimental: {
     serverComponentsExternalPackages: ['jsonwebtoken'],
+  },
+  
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
   
   // If using webpack 5
