@@ -47,6 +47,8 @@ export const collections = {
   messages: db.collection('messages'),
   insights: db.collection('insights'),
   automations: db.collection('automations'),
+  bookings: db.collection('bookings'),
+  visits: db.collection('visits'),
 } as const;
 
 

@@ -30,10 +30,21 @@ export default function CampaignsPage() {
     setLoading(false);
   };
 
-  const filteredCampaigns = campaigns.filter(c => 
+  const filteredCampaigns = campaigns.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const avgRates = (() => {
+    const totalSent = campaigns.reduce((acc, c) => acc + (c.stats?.sent || 0), 0);
+    if (totalSent === 0) return { openRate: 0, clickRate: 0 };
+    const totalOpened = campaigns.reduce((acc, c) => acc + (c.stats?.opened || 0), 0);
+    const totalClicked = campaigns.reduce((acc, c) => acc + (c.stats?.clicked || 0), 0);
+    return {
+      openRate: Math.round((totalOpened / totalSent) * 100),
+      clickRate: Math.round((totalClicked / totalSent) * 100),
+    };
+  })();
 
   return (
     <div className="min-h-[calc(100vh-80px)] bg-background text-white p-6 md:p-8">
@@ -61,8 +72,8 @@ export default function CampaignsPage() {
         {[
           { label: 'Sent Campaigns', value: campaigns.filter(c => c.status === 'sent').length, icon: <Megaphone className="w-4 h-4 text-primary" /> },
           { label: 'Total Emails Sent', value: campaigns.reduce((acc, c) => acc + (c.stats?.sent || 0), 0), icon: <Mail className="w-4 h-4 text-blue-400" /> },
-          { label: 'Avg Open Rate', value: '42.8%', icon: <Users className="w-4 h-4 text-green-400" /> },
-          { label: 'Avg Click Rate', value: '12.4%', icon: <MousePointerClick className="w-4 h-4 text-orange-400" /> },
+          { label: 'Avg Open Rate', value: `${avgRates.openRate}%`, icon: <Users className="w-4 h-4 text-green-400" /> },
+          { label: 'Avg Click Rate', value: `${avgRates.clickRate}%`, icon: <MousePointerClick className="w-4 h-4 text-orange-400" /> },
         ].map((kpi, i) => (
           <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent className="p-6">
@@ -155,11 +166,15 @@ export default function CampaignsPage() {
                       </div>
                       <div>
                         <div className="text-white/40 text-xs font-bold uppercase tracking-wider mb-1">Open %</div>
-                        <div className="text-xl font-bold text-white">--</div>
+                        <div className="text-xl font-bold text-white">
+                          {campaign.stats?.sent ? `${Math.round(((campaign.stats?.opened || 0) / campaign.stats.sent) * 100)}%` : '--'}
+                        </div>
                       </div>
                       <div>
                         <div className="text-white/40 text-xs font-bold uppercase tracking-wider mb-1">Click %</div>
-                        <div className="text-xl font-bold text-white">--</div>
+                        <div className="text-xl font-bold text-white">
+                          {campaign.stats?.sent ? `${Math.round(((campaign.stats?.clicked || 0) / campaign.stats.sent) * 100)}%` : '--'}
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -1,11 +1,12 @@
 'use server';
 
 import { collections } from '@/lib/email-va/firebase';
+import { getContactsByIds } from './contacts';
 
 export interface ActivityEvent {
   id?: string;
   contactId: string;
-  type: 'email_received' | 'email_sent' | 'enquiry_submitted' | 'lead_created' | 'lead_status_changed' | 'note_added';
+  type: 'email_received' | 'email_sent' | 'enquiry_submitted' | 'lead_created' | 'lead_status_changed' | 'note_added' | 'discovery_call_booked';
   title: string;
   description?: string;
   metadata?: any;
@@ -56,6 +57,40 @@ export async function getContactActivity(contactId: string) {
     return { success: true, events };
   } catch (error: any) {
     console.error('Get activity error:', error);
+    return { success: false, error: error.message, events: [] };
+  }
+}
+
+/**
+ * Global recent-activity feed (not scoped to one contact) for the dashboard
+ * home page, enriched with the contact's name/email.
+ */
+export async function getRecentActivity(limit = 10) {
+  try {
+    const snapshot = await collections.activityLog
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+      .get();
+
+    const events = snapshot.docs.map((doc: any) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt?.toDate?.() ? data.createdAt.toDate().toISOString() : undefined,
+      };
+    });
+
+    const { contacts } = await getContactsByIds(events.map((e: any) => e.contactId));
+    const enriched = events.map((e: any) => ({
+      ...e,
+      contactName: contacts?.[e.contactId]?.name,
+      contactEmail: contacts?.[e.contactId]?.email,
+    }));
+
+    return { success: true, events: enriched };
+  } catch (error: any) {
+    console.error('Get recent activity error:', error);
     return { success: false, error: error.message, events: [] };
   }
 }

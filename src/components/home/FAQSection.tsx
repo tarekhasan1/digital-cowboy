@@ -10,8 +10,8 @@ const FAQS = [
     answer: "Pricing depends on the scope and complexity of your requirements. Our Launch websites start from A$1,490, Growth websites from A$3,500, and Custom Software from A$10,000+. Every project is scoped around your specific business needs."
   },
   {
-    question: "Do you work outside Townsville?",
-    answer: "Yes. While we are proudly based in Townsville, Queensland, we work with ambitious businesses across Australia and internationally. Everything we build is managed efficiently online."
+    question: "Do you work with businesses outside your local area?",
+    answer: "Yes. We work with ambitious businesses everywhere, managed efficiently online — no matter where you're based."
   },
   {
     question: "Do you provide ongoing support?",

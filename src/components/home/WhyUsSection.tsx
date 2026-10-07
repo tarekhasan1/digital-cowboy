@@ -25,8 +25,8 @@ const REASONS = [
   },
   {
     num: "05",
-    title: "Australian roots. Global capability.",
-    desc: "Based in Townsville, Queensland, with the capability to work with ambitious businesses across Australia and internationally."
+    title: "Remote-first. Global capability.",
+    desc: "We work with ambitious businesses everywhere, managed efficiently online — no matter where you're based."
   }
 ];
 

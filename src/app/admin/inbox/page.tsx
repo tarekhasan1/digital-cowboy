@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { 
-  Inbox, Star, Send, File, Archive, Trash2, 
-  Search, CheckSquare, Square, MoreVertical, 
+import { useState, useEffect, useMemo } from 'react';
+import {
+  Inbox, Star, Send, File, Archive, Trash2,
+  Search, CheckSquare, Square, MoreVertical,
   Tag, Clock, AlertCircle, MessageSquare, Briefcase, Plus,
-  Reply, Sparkles
+  Reply, Sparkles, Mail, MailOpen, RefreshCw
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,9 +16,48 @@ import { getMessagesByConversation, EmailMessage, createMessage, upsertDraft, de
 import { getContactById, Contact, upsertContact } from '@/actions/crm/contacts';
 import { getContactActivity, ActivityEvent } from '@/actions/crm/activity';
 import { generateDraft, modifyDraft } from '@/actions/crm/ai';
+import { pullInboundEmails } from '@/actions/crm/inbound';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 type FolderType = 'inbox' | 'starred' | 'sent' | 'drafts' | 'archived' | 'trash' | 'spam';
+
+function getInitials(nameOrEmail: string) {
+  const trimmed = nameOrEmail.trim();
+  if (!trimmed) return '?';
+  const parts = trimmed.split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return trimmed.slice(0, 2).toUpperCase();
+}
+
+function formatListTimestamp(value?: string | Date) {
+  if (!value) return '';
+  const date = new Date(value);
+  const now = new Date();
+  const sameDay = date.toDateString() === now.toDateString();
+  if (sameDay) {
+    return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  }
+  const daysAgo = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+  if (daysAgo < 7) {
+    return date.toLocaleDateString(undefined, { weekday: 'short' });
+  }
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+const AVATAR_PALETTE = [
+  'bg-rose-500/20 text-rose-300',
+  'bg-amber-500/20 text-amber-300',
+  'bg-emerald-500/20 text-emerald-300',
+  'bg-sky-500/20 text-sky-300',
+  'bg-violet-500/20 text-violet-300',
+  'bg-pink-500/20 text-pink-300',
+];
+
+function getAvatarColor(seed: string) {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  return AVATAR_PALETTE[hash % AVATAR_PALETTE.length];
+}
 
 export default function InboxPage() {
   const [activeFolder, setActiveFolder] = useState<FolderType>('inbox');
@@ -44,9 +83,68 @@ export default function InboxPage() {
   const [draftingCompose, setDraftingCompose] = useState(false);
   const [modifyingDraft, setModifyingDraft] = useState(false);
 
+  const [pullingEmails, setPullingEmails] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
   useEffect(() => {
     loadConversations();
+    setSelectedIds(new Set());
   }, [activeFolder]);
+
+  const filteredConversations = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return conversations;
+    return conversations.filter(c => {
+      return (
+        c.subject?.toLowerCase().includes(q) ||
+        c.lastMessageSnippet?.toLowerCase().includes(q) ||
+        c.contactName?.toLowerCase().includes(q) ||
+        c.contactEmail?.toLowerCase().includes(q)
+      );
+    });
+  }, [conversations, searchQuery]);
+
+  const toggleSelected = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const handleBulkArchive = async () => {
+    const ids = Array.from(selectedIds);
+    setConversations(prev => prev.filter(c => !ids.includes(c.id!)));
+    clearSelection();
+    await Promise.all(ids.map(id => updateConversation(id, { isArchived: true })));
+  };
+
+  const handleBulkTrash = async () => {
+    const ids = Array.from(selectedIds);
+    setConversations(prev => prev.filter(c => !ids.includes(c.id!)));
+    clearSelection();
+    await Promise.all(ids.map(id => {
+      const conv = conversations.find(c => c.id === id);
+      const labels = conv?.labels?.includes('trash') ? conv.labels : [...(conv?.labels || []), 'trash'];
+      return updateConversation(id, { labels });
+    }));
+  };
+
+  const handleBulkMarkRead = async () => {
+    const ids = Array.from(selectedIds);
+    setConversations(prev => prev.map(c => ids.includes(c.id!) ? { ...c, unreadCount: 0 } : c));
+    clearSelection();
+    await Promise.all(ids.map(id => updateConversation(id, { unreadCount: 0 })));
+  };
+
+  const handleToggleStar = async (id: string, currentlyStarred: boolean) => {
+    setConversations(prev => prev.map(c => c.id === id ? { ...c, isStarred: !currentlyStarred } : c));
+    await updateConversation(id, { isStarred: !currentlyStarred });
+  };
 
   useEffect(() => {
     if (activeConvId) {
@@ -83,6 +181,19 @@ export default function InboxPage() {
     setLoadingConvs(false);
   };
 
+  const handlePullEmails = async () => {
+    if (pullingEmails) return;
+    setPullingEmails(true);
+    try {
+      await pullInboundEmails();
+      await loadConversations();
+    } catch (error) {
+      console.error('Failed to pull emails:', error);
+    } finally {
+      setPullingEmails(false);
+    }
+  };
+
   const loadThread = async (convId: string) => {
     setLoadingThread(true);
     const conv = conversations.find(c => c.id === convId);
@@ -113,8 +224,30 @@ export default function InboxPage() {
         }
       }
       if (contactRes.success) setActiveContact(contactRes.contact as Contact);
+      
+      // Auto-mark as read when opening a thread
+      if (conv.unreadCount > 0) {
+        updateConversation(convId, { unreadCount: 0 }).catch(console.error);
+        setConversations(prev => prev.map(c => c.id === convId ? { ...c, unreadCount: 0 } : c));
+      }
     }
     setLoadingThread(false);
+  };
+
+  const handleToggleReadStatus = async () => {
+    if (!activeConvId) return;
+    const currentConv = conversations.find(c => c.id === activeConvId);
+    if (!currentConv) return;
+    
+    const newUnreadCount = currentConv.unreadCount > 0 ? 0 : 1;
+    
+    // Optimistic UI update
+    setConversations(prev => prev.map(c => 
+      c.id === activeConvId ? { ...c, unreadCount: newUnreadCount } : c
+    ));
+    
+    // Background sync
+    await updateConversation(activeConvId, { unreadCount: newUnreadCount });
   };
 
   const handleSendReply = async () => {
@@ -137,11 +270,33 @@ export default function InboxPage() {
     } else {
       // Clean up the draft once successfully sent
       await deleteDraft(activeConvId);
+      
+      // Optimistically add to thread
+      const newMsg: EmailMessage = {
+        id: result.messageId,
+        conversationId: activeConvId,
+        direction: 'outbound',
+        from: 'admin@digitalcowboy.com',
+        to: activeContact.email,
+        subject: `Re: ${conversations.find(c => c.id === activeConvId)?.subject}`,
+        text: replyText,
+        readStatus: 'read',
+        isStarred: false,
+        deliveryStatus: 'sent',
+        createdAt: new Date().toISOString()
+      };
+      setActiveMessages(prev => [...prev, newMsg]);
+      
+      // Optimistically update conversation snippet
+      setConversations(prev => prev.map(c => 
+        c.id === activeConvId 
+          ? { ...c, lastMessageSnippet: replyText.substring(0, 100), latestDirection: 'outbound', lastMessageAt: new Date().toISOString() } 
+          : c
+      ));
     }
     
     setReplyText('');
     setSendingReply(false);
-    loadThread(activeConvId); // reload thread
   };
 
   const handleSendCompose = async () => {
@@ -226,6 +381,17 @@ export default function InboxPage() {
     setModifyingDraft(false);
   };
 
+  const selectNextConversation = (currentId: string) => {
+    const currentIndex = conversations.findIndex(c => c.id === currentId);
+    if (currentIndex === -1) return null;
+    if (currentIndex < conversations.length - 1) {
+      return conversations[currentIndex + 1].id || null;
+    } else if (currentIndex > 0) {
+      return conversations[currentIndex - 1].id || null;
+    }
+    return null;
+  };
+
   const handleArchiveConversation = async () => {
     if (!activeConvId) return;
     const currentConv = conversations.find(c => c.id === activeConvId);
@@ -233,17 +399,24 @@ export default function InboxPage() {
     
     // Toggle archive state
     const newArchivedState = !currentConv.isArchived;
-    await updateConversation(activeConvId, { isArchived: newArchivedState });
     
-    // Update local state immediately
-    setConversations(conversations.map(c => 
-      c.id === activeConvId ? { ...c, isArchived: newArchivedState } : c
-    ));
-    
+    // Optimistically update local state immediately
     if (newArchivedState && activeFolder !== 'archived') {
-      setActiveConvId(null);
-      loadConversations();
+      const nextId = selectNextConversation(activeConvId);
+      setConversations(prev => prev.filter(c => c.id !== activeConvId));
+      setActiveConvId(nextId);
+    } else if (!newArchivedState && activeFolder === 'archived') {
+      const nextId = selectNextConversation(activeConvId);
+      setConversations(prev => prev.filter(c => c.id !== activeConvId));
+      setActiveConvId(nextId);
+    } else {
+      setConversations(prev => prev.map(c => 
+        c.id === activeConvId ? { ...c, isArchived: newArchivedState } : c
+      ));
     }
+    
+    // Background sync
+    await updateConversation(activeConvId, { isArchived: newArchivedState });
   };
 
   const handleTrashConversation = async () => {
@@ -258,17 +431,23 @@ export default function InboxPage() {
       ? currentLabels.filter(l => l !== 'trash')
       : [...currentLabels, 'trash'];
       
-    await updateConversation(activeConvId, { labels: newLabels });
-    
-    // Update local state
-    setConversations(conversations.map(c => 
-      c.id === activeConvId ? { ...c, labels: newLabels } : c
-    ));
-    
+    // Optimistic UI update
     if (!isTrash && activeFolder !== 'trash') {
-      setActiveConvId(null);
-      loadConversations();
+      const nextId = selectNextConversation(activeConvId);
+      setConversations(prev => prev.filter(c => c.id !== activeConvId));
+      setActiveConvId(nextId);
+    } else if (isTrash && activeFolder === 'trash') {
+      const nextId = selectNextConversation(activeConvId);
+      setConversations(prev => prev.filter(c => c.id !== activeConvId));
+      setActiveConvId(nextId);
+    } else {
+      setConversations(prev => prev.map(c => 
+        c.id === activeConvId ? { ...c, labels: newLabels } : c
+      ));
     }
+    
+    // Background sync
+    await updateConversation(activeConvId, { labels: newLabels });
   };
 
   const handleSpamConversation = async () => {
@@ -283,16 +462,23 @@ export default function InboxPage() {
       ? currentLabels.filter(l => l !== 'spam')
       : [...currentLabels, 'spam'];
       
-    await updateConversation(activeConvId, { labels: newLabels });
-    
-    setConversations(conversations.map(c => 
-      c.id === activeConvId ? { ...c, labels: newLabels } : c
-    ));
-    
+    // Optimistic UI update
     if (!isSpam && activeFolder !== 'spam') {
-      setActiveConvId(null);
-      loadConversations();
+      const nextId = selectNextConversation(activeConvId);
+      setConversations(prev => prev.filter(c => c.id !== activeConvId));
+      setActiveConvId(nextId);
+    } else if (isSpam && activeFolder === 'spam') {
+      const nextId = selectNextConversation(activeConvId);
+      setConversations(prev => prev.filter(c => c.id !== activeConvId));
+      setActiveConvId(nextId);
+    } else {
+      setConversations(prev => prev.map(c => 
+        c.id === activeConvId ? { ...c, labels: newLabels } : c
+      ));
     }
+      
+    // Background sync
+    await updateConversation(activeConvId, { labels: newLabels });
   };
 
   return (
@@ -310,34 +496,39 @@ export default function InboxPage() {
         </div>
         <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
           {[
-            { id: 'inbox', icon: <Inbox className="w-4 h-4" />, label: 'Inbox', badge: 3 },
+            { id: 'inbox', icon: <Inbox className="w-4 h-4" />, label: 'Inbox' },
             { id: 'starred', icon: <Star className="w-4 h-4" />, label: 'Starred' },
             { id: 'sent', icon: <Send className="w-4 h-4" />, label: 'Sent' },
             { id: 'drafts', icon: <File className="w-4 h-4" />, label: 'Drafts' },
             { id: 'archived', icon: <Archive className="w-4 h-4" />, label: 'Archived' },
             { id: 'spam', icon: <AlertCircle className="w-4 h-4" />, label: 'Spam' },
             { id: 'trash', icon: <Trash2 className="w-4 h-4" />, label: 'Trash' },
-          ].map(folder => (
-            <button
-              key={folder.id}
-              onClick={() => { setActiveFolder(folder.id as FolderType); setActiveConvId(null); }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
-                activeFolder === folder.id 
-                  ? 'bg-primary/20 text-primary' 
-                  : 'text-white/70 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              <div className="flex items-center gap-3 font-medium">
-                {folder.icon}
-                <span className="capitalize">{folder.label}</span>
-              </div>
-              {folder.badge && (
-                <span className="bg-primary/20 text-primary px-2 py-0.5 rounded-full text-xs font-bold">
-                  {folder.badge}
-                </span>
-              )}
-            </button>
-          ))}
+          ].map(folder => {
+            const unreadInThisFolder = activeFolder === folder.id
+              ? conversations.reduce((sum, c) => sum + (c.unreadCount > 0 ? 1 : 0), 0)
+              : 0;
+            return (
+              <button
+                key={folder.id}
+                onClick={() => { setActiveFolder(folder.id as FolderType); setActiveConvId(null); }}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+                  activeFolder === folder.id
+                    ? 'bg-primary/20 text-primary'
+                    : 'text-white/70 hover:bg-white/5 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center gap-3 font-medium">
+                  {folder.icon}
+                  <span className="capitalize">{folder.label}</span>
+                </div>
+                {unreadInThisFolder > 0 && (
+                  <span className="bg-primary/20 text-primary px-2 py-0.5 rounded-full text-xs font-bold tabular-nums">
+                    {unreadInThisFolder}
+                  </span>
+                )}
+              </button>
+            );
+          })}
           
           <div className="pt-6 pb-2 px-3">
             <h4 className="text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Labels</h4>
@@ -354,60 +545,130 @@ export default function InboxPage() {
       </div>
 
       {/* MIDDLE PANE: CONVERSATION LIST */}
-      <div className="flex-1 flex flex-col min-w-[300px] border-r border-white/10 relative z-10">
-        <div className="p-4 border-b border-white/10 bg-black/20 backdrop-blur-md sticky top-0">
-          <div className="relative">
-            <Search className="w-4 h-4 text-white/40 absolute left-3 top-1/2 -translate-y-1/2" />
-            <Input 
-              placeholder="Search emails..." 
-              className="w-full pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-primary/50"
-            />
-          </div>
+      <div className="flex-1 flex flex-col min-w-[320px] border-r border-white/10 relative z-10">
+        <div className="p-3 border-b border-white/10 bg-black/20 backdrop-blur-md sticky top-0">
+          {selectedIds.size > 0 ? (
+            <div className="flex items-center gap-1 h-9">
+              <Button variant="ghost" size="icon" onClick={clearSelection} className="h-9 w-9 text-white/70 hover:text-white hover:bg-white/10">
+                <Square className="w-4 h-4" />
+              </Button>
+              <span className="text-sm font-medium text-white/70 px-1 tabular-nums">{selectedIds.size} selected</span>
+              <div className="flex-1" />
+              <Button variant="ghost" size="icon" onClick={handleBulkMarkRead} title="Mark as read" className="h-9 w-9 text-white/70 hover:text-white hover:bg-white/10">
+                <MailOpen className="w-4 h-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={handleBulkArchive} title="Archive" className="h-9 w-9 text-white/70 hover:text-white hover:bg-white/10">
+                <Archive className="w-4 h-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={handleBulkTrash} title="Delete" className="h-9 w-9 text-white/70 hover:text-red-400 hover:bg-white/10">
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-white/40 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Input
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search mail..."
+                  className="w-full pl-9 bg-white/5 border-white/10 text-white placeholder:text-white/40 focus:border-primary/50"
+                />
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handlePullEmails}
+                disabled={pullingEmails}
+                title="Pull latest emails"
+                className="h-9 w-9 shrink-0 text-white/70 hover:text-white hover:bg-white/10"
+              >
+                <RefreshCw className={`w-4 h-4 ${pullingEmails ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
+          )}
         </div>
-        
+
         <div className="flex-1 overflow-y-auto">
           {loadingConvs ? (
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-5">
               {[1,2,3,4,5].map(i => (
-                <div key={i} className="flex gap-4">
-                  <Skeleton className="w-10 h-10 rounded-full bg-white/5 shrink-0" />
+                <div key={i} className="flex gap-3">
+                  <Skeleton className="w-9 h-9 rounded-full bg-white/5 shrink-0" />
                   <div className="space-y-2 flex-1">
-                    <Skeleton className="h-4 w-1/3 bg-white/5" />
-                    <Skeleton className="h-4 w-full bg-white/5" />
+                    <Skeleton className="h-3.5 w-1/3 bg-white/5" />
+                    <Skeleton className="h-3.5 w-full bg-white/5" />
                   </div>
                 </div>
               ))}
             </div>
-          ) : conversations.length === 0 ? (
+          ) : filteredConversations.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-white/40 p-8 text-center">
               <Inbox className="w-12 h-12 mb-4 opacity-20" />
-              <p>No conversations found in {activeFolder}</p>
+              <p>{searchQuery ? `No results for "${searchQuery}"` : `No conversations in ${activeFolder}`}</p>
             </div>
           ) : (
             <div className="divide-y divide-white/5">
-              {conversations.map(conv => (
-                <div 
-                  key={conv.id}
-                  onClick={() => setActiveConvId(conv.id!)}
-                  className={`p-4 cursor-pointer transition-colors group ${
-                    activeConvId === conv.id 
-                      ? 'bg-primary/10 border-l-2 border-primary' 
-                      : 'hover:bg-white/5 border-l-2 border-transparent'
-                  }`}
-                >
-                  <div className="flex justify-between items-start mb-1">
-                    <span className={`font-semibold ${conv.unreadCount > 0 ? 'text-white' : 'text-white/70'}`}>
-                      {conv.subject || '(No Subject)'}
-                    </span>
-                    <span className="text-xs text-white/40 whitespace-nowrap ml-2">
-                      {conv.lastMessageAt ? new Date(conv.lastMessageAt).toLocaleDateString() : ''}
-                    </span>
+              {filteredConversations.map(conv => {
+                const isUnread = conv.unreadCount > 0;
+                const senderLabel = conv.contactName || conv.contactEmail || 'Unknown';
+                const isSelected = selectedIds.has(conv.id!);
+                return (
+                  <div
+                    key={conv.id}
+                    onClick={() => setActiveConvId(conv.id!)}
+                    className={`relative flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors group border-l-2 ${
+                      activeConvId === conv.id
+                        ? 'bg-primary/10 border-primary'
+                        : isSelected
+                        ? 'bg-primary/5 border-transparent'
+                        : 'hover:bg-white/5 border-transparent'
+                    }`}
+                  >
+                    <button
+                      onClick={(e) => { e.stopPropagation(); toggleSelected(conv.id!); }}
+                      className="mt-0.5 shrink-0 text-white/30 hover:text-white/70 transition-colors"
+                    >
+                      {isSelected ? <CheckSquare className="w-4 h-4 text-primary" /> : (
+                        <>
+                          <Square className="w-4 h-4 hidden group-hover:block" />
+                          <span className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold group-hover:hidden ${getAvatarColor(senderLabel)}`}>
+                            {getInitials(senderLabel)}
+                          </span>
+                        </>
+                      )}
+                    </button>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-baseline gap-2">
+                        <span className={`truncate ${isUnread ? 'font-semibold text-white' : 'font-medium text-white/60'}`}>
+                          {senderLabel}
+                        </span>
+                        <span className="flex items-center gap-2 shrink-0">
+                          <span className="text-xs text-white/40 tabular-nums group-hover:hidden">
+                            {formatListTimestamp(conv.lastMessageAt)}
+                          </span>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleToggleStar(conv.id!, conv.isStarred); }}
+                            className={`hidden group-hover:inline-flex ${conv.isStarred ? '!inline-flex' : ''}`}
+                          >
+                            <Star className={`w-3.5 h-3.5 ${conv.isStarred ? 'fill-amber-400 text-amber-400' : 'text-white/40 hover:text-white/70'}`} />
+                          </button>
+                        </span>
+                      </div>
+                      <div className="flex items-baseline gap-1.5 mt-0.5">
+                        {isUnread && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
+                        <span className={`text-sm truncate ${isUnread ? 'text-white/90 font-medium' : 'text-white/50'}`}>
+                          {conv.subject || '(No Subject)'}
+                        </span>
+                        <span className="text-sm text-white/35 truncate">
+                          — {conv.lastMessageSnippet || 'No content preview'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <p className={`text-sm line-clamp-2 ${conv.unreadCount > 0 ? 'text-white/90 font-medium' : 'text-white/50'}`}>
-                    {conv.lastMessageSnippet || 'No content preview'}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -420,10 +681,24 @@ export default function InboxPage() {
           <div className="flex-[3] flex flex-col border-r border-white/10 relative">
             {/* Thread Header */}
             <div className="p-5 border-b border-white/10 bg-black/20 backdrop-blur-md flex justify-between items-center sticky top-0 z-10">
-              <h2 className="text-xl font-bold text-white truncate pr-4">
-                {conversations.find(c => c.id === activeConvId)?.subject}
-              </h2>
+              <div className="min-w-0 pr-4">
+                <h2 className="text-lg font-semibold text-white tracking-tight truncate">
+                  {conversations.find(c => c.id === activeConvId)?.subject || '(No Subject)'}
+                </h2>
+                <p className="text-xs text-white/40 truncate mt-0.5">
+                  {activeMessages.length} message{activeMessages.length !== 1 ? 's' : ''} with {activeContact.name || activeContact.email}
+                </p>
+              </div>
               <div className="flex items-center gap-2 shrink-0">
+                <Button 
+                  onClick={handleToggleReadStatus}
+                  variant="ghost" 
+                  size="icon" 
+                  className="text-white/50 hover:text-white"
+                  title={conversations.find(c => c.id === activeConvId)?.unreadCount ? "Mark as Read" : "Mark as Unread"}
+                >
+                  {conversations.find(c => c.id === activeConvId)?.unreadCount ? <MailOpen className="w-4 h-4" /> : <Mail className="w-4 h-4" />}
+                </Button>
                 <Button 
                   onClick={handleArchiveConversation}
                   variant="ghost" 
@@ -456,38 +731,63 @@ export default function InboxPage() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {loadingThread ? (
                 <div className="flex justify-center py-10"><Skeleton className="w-8 h-8 rounded-full bg-primary/20 animate-pulse" /></div>
-              ) : activeMessages.map(msg => (
-                <div key={msg.id} className={`flex flex-col ${msg.direction === 'outbound' ? 'items-end' : 'items-start'}`}>
-                  <div className={`max-w-[85%] rounded-2xl p-5 ${
-                    msg.direction === 'outbound' 
-                      ? 'bg-primary/20 text-white border border-primary/30' 
-                      : 'bg-white/5 text-white/90 border border-white/10'
-                  }`}>
-                    <div className="flex justify-between items-center mb-3 text-xs opacity-70">
-                      <span className="font-semibold">{msg.direction === 'outbound' ? 'You' : activeContact.name || activeContact.email}</span>
-                      <span>{msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ''}</span>
+              ) : activeMessages.map(msg => {
+                const isOutbound = msg.direction === 'outbound';
+                const senderLabel = isOutbound ? 'You' : (activeContact.name || activeContact.email);
+                return (
+                  <div
+                    key={msg.id}
+                    className={`rounded-xl border overflow-hidden ${
+                      isOutbound ? 'border-primary/20 bg-primary/[0.04]' : 'border-white/10 bg-white/[0.03]'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3 px-5 py-3 border-b border-white/5">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                          isOutbound ? 'bg-primary/20 text-primary' : getAvatarColor(senderLabel)
+                        }`}>
+                          {getInitials(senderLabel)}
+                        </span>
+                        <div className="min-w-0">
+                          <div className="text-sm font-semibold text-white truncate">{senderLabel}</div>
+                          <div className="text-xs text-white/40 truncate">
+                            to {isOutbound ? activeContact.email : 'you'}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-xs text-white/40 shrink-0 tabular-nums">
+                        {msg.createdAt
+                          ? new Date(msg.createdAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+                          : ''}
+                      </span>
                     </div>
-                    {msg.html ? (
-                      <div className="prose prose-invert prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: msg.html }} />
-                    ) : (
-                      <div className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</div>
-                    )}
+                    <div className="px-5 py-4">
+                      {msg.html ? (
+                        <div className="prose prose-invert prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: msg.html }} />
+                      ) : (
+                        <div className="whitespace-pre-wrap text-[15px] leading-relaxed text-white/90">{msg.text}</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Composer */}
             <div className="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md">
               <div className="bg-background border border-white/10 rounded-xl overflow-hidden focus-within:border-primary/50 transition-colors">
-                <textarea 
+                <div className="flex items-center gap-2 px-4 pt-3 text-xs font-medium text-white/40">
+                  <Reply className="w-3.5 h-3.5" />
+                  <span>Replying to {activeContact.name || activeContact.email}</span>
+                </div>
+                <textarea
                   value={replyText}
                   onChange={e => setReplyText(e.target.value)}
-                  placeholder="Draft a reply..."
-                  className="w-full bg-transparent p-4 text-sm text-white resize-none outline-none min-h-[100px]"
+                  placeholder="Write your reply..."
+                  className="w-full bg-transparent px-4 pt-2 pb-4 text-[15px] text-white resize-none outline-none min-h-[100px]"
                 />
                 <div className="flex justify-between items-center p-3 bg-white/5 border-t border-white/10">
                   <div className="flex gap-2">

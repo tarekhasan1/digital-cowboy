@@ -51,12 +51,12 @@ export async function createLead(params: Partial<Lead> & { contactId: string }) 
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    
+
     // Remove undefined values
     Object.keys(data).forEach(key => data[key] === undefined && delete data[key]);
-    
+
     const ref = await collections.leads.add(data);
-    
+
     const { logActivity } = await import('./activity');
     await logActivity({
       contactId: params.contactId!,
@@ -64,7 +64,29 @@ export async function createLead(params: Partial<Lead> & { contactId: string }) 
       title: 'Lead Created',
       description: `Value: $${data.value || 0}`,
     });
-    
+
+    const contactDoc = await collections.contacts.doc(params.contactId!).get();
+    if (contactDoc.exists) {
+      const contact = contactDoc.data()!;
+      const { checkAndFireAutomations } = await import('../automations');
+      await checkAndFireAutomations('new_lead_added', {
+        contactId: params.contactId!,
+        contactEmail: contact.email,
+        contactName: contact.name,
+      });
+
+      const { getSiteSettings } = await import('../settings');
+      const settings = await getSiteSettings();
+      if (settings.notifyOnNewLead) {
+        const { resend } = await import('@/lib/email-va/resend');
+        await resend.sendEmail({
+          to: settings.notifyEmail,
+          subject: `New Lead: ${contact.name || contact.email}`,
+          html: `<p>A new lead was added to the pipeline.</p><p><strong>Contact:</strong> ${contact.name || contact.email} (${contact.email})</p><p><strong>Service:</strong> ${data.serviceInterest || 'General'}</p>`,
+        });
+      }
+    }
+
     return { success: true, leadId: ref.id };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -82,16 +104,24 @@ export async function updateLead(id: string, updates: Partial<Lead>) {
     await collections.leads.doc(id).update(data);
     
     // Log if status changed
-    if (params.status) {
+    if (updates.status) {
       const doc = await collections.leads.doc(id).get();
       if (doc.exists) {
+        const contactId = doc.data()?.contactId;
         const { logActivity } = await import('./activity');
         await logActivity({
-          contactId: doc.data()?.contactId,
+          contactId,
           type: 'lead_status_changed',
           title: 'Lead Status Changed',
-          description: `Moved to ${params.status}`,
+          description: `Moved to ${updates.status}`,
         });
+
+        // Keep the linked Contact's lifecycle fields in sync with the pipeline.
+        if (contactId && updates.status === 'Won') {
+          await collections.contacts.doc(contactId).update({ type: 'customer', status: 'won' });
+        } else if (contactId && updates.status === 'Lost') {
+          await collections.contacts.doc(contactId).update({ status: 'lost' });
+        }
       }
     }
     

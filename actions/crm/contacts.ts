@@ -1,5 +1,6 @@
 'use server';
 
+import { FieldPath } from 'firebase-admin/firestore';
 import { collections } from '@/lib/email-va/firebase';
 
 export interface Contact {
@@ -100,6 +101,34 @@ export async function getContactById(id: string) {
   } catch (error: any) {
     console.error('Get contact by id error:', error);
     return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Batch-fetch contacts by id, keyed by id. Used to enrich lists (e.g. the
+ * inbox conversation list) with sender name/email without an N+1 query per row.
+ */
+export async function getContactsByIds(ids: string[]) {
+  try {
+    const uniqueIds = Array.from(new Set(ids.filter(Boolean)));
+    const contactsById: Record<string, Contact> = {};
+    if (uniqueIds.length === 0) return { success: true, contacts: contactsById };
+
+    const CHUNK = 30; // Firestore 'in' query limit
+    const chunks: string[][] = [];
+    for (let i = 0; i < uniqueIds.length; i += CHUNK) chunks.push(uniqueIds.slice(i, i + CHUNK));
+
+    await Promise.all(chunks.map(async (chunk) => {
+      const snap = await collections.contacts.where(FieldPath.documentId(), 'in', chunk).get();
+      snap.docs.forEach((doc: any) => {
+        contactsById[doc.id] = { id: doc.id, ...doc.data() } as Contact;
+      });
+    }));
+
+    return { success: true, contacts: contactsById };
+  } catch (error: any) {
+    console.error('Get contacts by ids error:', error);
+    return { success: false, error: error.message, contacts: {} as Record<string, Contact> };
   }
 }
 

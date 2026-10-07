@@ -78,7 +78,7 @@ const Navbar: React.FC = () => {
 
             <div className="flex items-center space-x-3">
               <Link
-                href="/contact"
+                href="/book"
                 className="text-sm font-medium text-white/90 hover:text-white transition-colors px-3 py-2 hidden xl:block"
               >
                 Book a Discovery Call
@@ -140,7 +140,7 @@ const Navbar: React.FC = () => {
                 </Link>
                 <Link
                   onClick={() => setIsOpen(false)}
-                  href="/contact"
+                  href="/book"
                   className="block w-full text-center bg-transparent border border-white/20 text-white hover:bg-white/5 px-5 py-4 rounded-xl text-lg font-medium transition-colors"
                 >
                   Book a Discovery Call

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 const METRICS = [
-  { label: "Australian-Based", value: "100%" },
+  { label: "Remote-Friendly", value: "100%" },
   { label: "Full-Stack Development", value: "Expertise" },
   { label: "AI & Automation", value: "Ready" },
   { label: "Digital Growth", value: "Focused" },

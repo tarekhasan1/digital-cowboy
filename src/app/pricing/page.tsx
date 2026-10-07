@@ -134,7 +134,7 @@ export default function PricingPage() {
             <h2 className="text-2xl font-bold text-white mb-4">Not sure what you need?</h2>
             <p className="text-white/70 mb-8">Book a free 15-minute discovery call to discuss your business and figure out the best approach.</p>
             <Link
-              href="/contact"
+              href="/book"
               className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 rounded-full text-base font-semibold transition-all"
             >
               Book a Discovery Call

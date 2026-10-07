@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { autoSyncEmails, cleanupDeletedEmails } from '@/actions/email-va/sync-resend';
+import { pullInboundEmails } from '@/actions/crm/inbound';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,14 +17,20 @@ export async function GET(request: Request) {
   }
 
   try {
-    // 1. Sync new emails
+    // 1. Sync new emails into the CRM inbox (conversations/emailMessages) —
+    // same pull used by the manual refresh button on /admin/inbox, in case
+    // the inbound webhook was missed.
+    const pullResult = await pullInboundEmails();
+
+    // 2. Sync new emails into the legacy email-va inbox
     const syncResult = await autoSyncEmails();
-    
-    // 2. Cleanup old deleted emails (runs every time, but only deletes older than 90 days)
+
+    // 3. Cleanup old deleted emails (runs every time, but only deletes older than 90 days)
     const cleanupResult = await cleanupDeletedEmails();
 
     return NextResponse.json({
       success: true,
+      pull: pullResult,
       sync: syncResult,
       cleanup: cleanupResult
     });

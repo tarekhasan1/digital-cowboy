@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useState } from "react";
 import { submitContactForm } from "@/actions/messages";
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
@@ -175,9 +176,9 @@ export default function ContactPage() {
                     {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
                     {isSubmitting ? 'Sending...' : 'Send Project Enquiry'}
                   </button>
-                  <button type="button" className="flex-1 bg-white/5 border border-white/10 text-white hover:bg-white/10 px-8 py-4 rounded-xl text-base font-bold transition-colors">
+                  <Link href="/book" className="flex-1 bg-white/5 border border-white/10 text-white hover:bg-white/10 px-8 py-4 rounded-xl text-base font-bold transition-colors flex items-center justify-center">
                     Book a Discovery Call
-                  </button>
+                  </Link>
                 </div>
               </form>
             )}

@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { createCampaign, sendCampaign } from '@/actions/email-va/campaigns';
+import { createCampaign, sendCampaign, generateCampaignDraft } from '@/actions/email-va/campaigns';
 import Link from 'next/link';
 
 export default function NewCampaignPage() {
@@ -30,12 +30,14 @@ export default function NewCampaignPage() {
   const handleGenerateAI = async () => {
     if (!aiPrompt) return;
     setGenerating(true);
-    // Simulate AI generation for now (real integration would use groqAI action)
-    setTimeout(() => {
-      setSubject(`Exclusive Offer: Unlock your potential with ${name || 'us'}`);
-      setBodyText(`Hi {{name}},\n\nI noticed you might be interested in our services.\n\nWe have a special offer...`);
-      setGenerating(false);
-    }, 1500);
+    const res = await generateCampaignDraft(aiPrompt);
+    if (res.success) {
+      setSubject(res.subject || '');
+      setBodyText(res.body || '');
+    } else {
+      alert('Failed to generate draft: ' + res.error);
+    }
+    setGenerating(false);
   };
 
   const handleNext = () => setStep(s => Math.min(3, s + 1));

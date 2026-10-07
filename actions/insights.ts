@@ -59,13 +59,13 @@ export async function deleteInsight(id: string) {
 
 export async function getInsights(publishedOnly = false) {
   try {
+    // Filter only (no orderBy) to avoid needing a Firestore composite index —
+    // sort in memory instead, same workaround used elsewhere in this codebase.
     let query: any = collections.insights;
-    
+
     if (publishedOnly) {
       query = query.where('published', '==', true);
     }
-    
-    query = query.orderBy('createdAt', 'desc');
 
     const snapshot = await query.get();
 
@@ -78,6 +78,8 @@ export async function getInsights(publishedOnly = false) {
         publishedAt: data.publishedAt?.toDate?.() ? data.publishedAt.toDate().toISOString() : data.publishedAt,
       };
     });
+
+    posts.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return { success: true, posts };
   } catch (error: any) {

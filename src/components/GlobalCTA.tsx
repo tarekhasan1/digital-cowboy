@@ -29,8 +29,8 @@ export default function GlobalCTA() {
             >
               Start a Project
             </Link>
-            <Link 
-              href="/contact"
+            <Link
+              href="/book"
               className="w-full sm:w-auto px-8 py-4 bg-white/5 text-white font-medium rounded-md border border-white/10 hover:bg-white/10 transition-colors"
             >
               Book a Discovery Call

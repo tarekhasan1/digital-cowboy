@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import GlobalCTA from "@/components/GlobalCTA";
-import { Layout, Smartphone, Gauge, Search, MousePointerClick, BarChart2 } from "lucide-react";
+import { Layout, Code, Smartphone, Gauge, Search, MousePointerClick, BarChart2 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Website Development | DigitalCowboy",
@@ -16,7 +16,7 @@ const SERVICES = [
   {
     title: "Custom Development",
     description: "No slow page builders. We code custom, high-performance websites using modern frameworks like Next.js.",
-    icon: Code, // Will use Layout/Code placeholder
+    icon: Code,
   },
   {
     title: "Responsive Design",
@@ -39,9 +39,6 @@ const SERVICES = [
     icon: MousePointerClick,
   }
 ];
-
-// Reusing icon for custom dev since Code wasn't imported properly above. Let's fix that.
-import { Code } from "lucide-react";
 
 export default function WebsiteDevelopmentPage() {
   return (

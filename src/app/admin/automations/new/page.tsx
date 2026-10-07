@@ -7,19 +7,20 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Zap, Save, Plus, Workflow, MessageSquare, Mail, Users, Bell, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Zap, Save, Plus, Workflow, MessageSquare, Mail, Users, Bell, ArrowRight, Calendar } from 'lucide-react';
 import { createAutomation } from '../../../../../actions/automations';
 
 const TRIGGERS = [
   { id: 'contact_form_submitted', name: 'Contact Form Submitted', description: 'Triggers when a new enquiry is received', icon: <MessageSquare className="w-6 h-6 text-blue-400" /> },
   { id: 'new_lead_added', name: 'New Lead Added', description: 'Triggers when a lead is manually or automatically added', icon: <Users className="w-6 h-6 text-green-400" /> },
   { id: 'email_received', name: 'Email Received', description: 'Triggers when a new email hits the Inbox', icon: <Mail className="w-6 h-6 text-purple-400" /> },
+  { id: 'discovery_call_booked', name: 'Discovery Call Booked', description: 'Triggers when someone books a discovery call', icon: <Calendar className="w-6 h-6 text-orange-400" /> },
 ];
 
 const ACTIONS = [
-  { id: 'send_welcome_email', name: 'Send Welcome Email', description: 'Send a pre-configured welcome sequence', icon: <Mail className="w-6 h-6 text-blue-400" /> },
-  { id: 'notify_team_slack', name: 'Notify Team (Slack)', description: 'Send a notification to the team channel', icon: <Bell className="w-6 h-6 text-yellow-400" /> },
-  { id: 'add_to_campaign', name: 'Add to Drip Campaign', description: 'Subscribe the user to a specific marketing campaign', icon: <Workflow className="w-6 h-6 text-green-400" /> },
+  { id: 'send_welcome_email', name: 'Send Welcome Email', description: 'Send a welcome email to the contact', icon: <Mail className="w-6 h-6 text-blue-400" /> },
+  { id: 'notify_admin_email', name: 'Notify Admin by Email', description: 'Send a notification email to the agency admin', icon: <Bell className="w-6 h-6 text-yellow-400" /> },
+  { id: 'add_to_campaign', name: 'Tag for Campaign', description: "Tags the contact so they're included in campaigns targeting this workflow's name", icon: <Workflow className="w-6 h-6 text-green-400" /> },
 ];
 
 export default function NewAutomationPage() {

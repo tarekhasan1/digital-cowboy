@@ -1,34 +1,54 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { 
-  Users, UserPlus, Search, Filter, MoreHorizontal, 
-  Mail, Phone, ExternalLink, ArrowUpDown, Download, 
-  Upload, Tag, Briefcase, ChevronRight, LayoutKanban, 
-  List, Plus, Building2, Flame
+import { useState, useEffect, useMemo, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import {
+  Users, UserPlus, Search, MoreHorizontal,
+  Mail, ArrowUpDown,
+  Briefcase, ChevronRight, Kanban,
+  List, Plus, Building2, Flame, X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getContacts, Contact } from '@/actions/crm/contacts';
-import { getLeads, updateLead, Lead } from '@/actions/crm/leads';
+import { getContacts, upsertContact, Contact } from '@/actions/crm/contacts';
+import { getLeads, updateLead, createLead, Lead } from '@/actions/crm/leads';
 
 type TabView = 'pipeline' | 'contacts';
 const STAGES = ['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation', 'Won', 'Lost'];
 
 export default function CRMPage() {
+  return (
+    <Suspense fallback={null}>
+      <CRMPageContent />
+    </Suspense>
+  );
+}
+
+function CRMPageContent() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabView>('pipeline');
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+
+  const [showAddContact, setShowAddContact] = useState(false);
+  const [showAddLead, setShowAddLead] = useState(false);
 
   // Drag state
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
+    const q = searchParams?.get('q');
+    if (q) {
+      setActiveTab('contacts');
+      setSearchTerm(q);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadData = async () => {
@@ -37,17 +57,53 @@ export default function CRMPage() {
       getContacts(),
       getLeads()
     ]);
-    
+
     if (contactRes.success) setContacts(contactRes.contacts as Contact[]);
     if (leadRes.success) setLeads(leadRes.leads as Lead[]);
     setLoading(false);
   };
 
-  const filteredContacts = contacts.filter(c => 
-    c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.company?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredContacts = useMemo(() => {
+    const filtered = contacts.filter(c =>
+      c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.company?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return [...filtered].sort((a, b) => {
+      const nameA = (a.name || a.email).toLowerCase();
+      const nameB = (b.name || b.email).toLowerCase();
+      return sortDir === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+    });
+  }, [contacts, searchTerm, sortDir]);
+
+  const kpis = useMemo(() => {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+    const newThisMonth = contacts.filter(c => c.createdAt && new Date(c.createdAt) >= startOfMonth).length;
+    const newLastMonth = contacts.filter(c => {
+      if (!c.createdAt) return false;
+      const d = new Date(c.createdAt);
+      return d >= startOfLastMonth && d < startOfMonth;
+    }).length;
+
+    let newThisMonthTrend: string | null = null;
+    if (newLastMonth > 0) {
+      const delta = Math.round(((newThisMonth - newLastMonth) / newLastMonth) * 100);
+      newThisMonthTrend = `${delta >= 0 ? '+' : ''}${delta}% vs last month`;
+    } else if (newThisMonth > 0) {
+      newThisMonthTrend = 'vs 0 last month';
+    }
+
+    return {
+      totalContacts: contacts.length,
+      activeLeads: leads.filter(l => l.status !== 'Won' && l.status !== 'Lost').length,
+      customers: contacts.filter(c => c.type === 'customer').length,
+      newThisMonth,
+      newThisMonthTrend,
+    };
+  }, [contacts, leads]);
 
   // Kanban Native Drag & Drop Handlers
   const handleDragStart = (e: React.DragEvent, leadId: string) => {
@@ -66,10 +122,32 @@ export default function CRMPage() {
 
     // Optimistically update UI
     setLeads(prev => prev.map(l => l.id === draggedLeadId ? { ...l, status: newStatus } : l));
-    
+
     // Update DB
     await updateLead(draggedLeadId, { status: newStatus });
     setDraggedLeadId(null);
+    // Refresh so a Won/Lost drag reflects the contact sync (type/status change)
+    if (newStatus === 'Won' || newStatus === 'Lost') loadData();
+  };
+
+  const handleAddContact = async (data: { name: string; email: string; company?: string; phone?: string }) => {
+    await upsertContact({ ...data, type: 'contact' });
+    setShowAddContact(false);
+    loadData();
+  };
+
+  const handleAddLead = async (data: { name: string; email: string; company?: string; value?: number; serviceInterest?: string }) => {
+    const contactRes = await upsertContact({ name: data.name, email: data.email, company: data.company, type: 'lead' });
+    if (contactRes.success && contactRes.contactId) {
+      await createLead({
+        contactId: contactRes.contactId,
+        value: data.value,
+        serviceInterest: data.serviceInterest,
+        status: 'New',
+      });
+    }
+    setShowAddLead(false);
+    loadData();
   };
 
   return (
@@ -92,24 +170,24 @@ export default function CRMPage() {
               onClick={() => setActiveTab('pipeline')}
               className={activeTab === 'pipeline' ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white'}
             >
-              <LayoutKanban className="w-4 h-4 mr-2" /> Pipeline
+              <Kanban className="w-4 h-4 mr-2" /> Pipeline
             </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setActiveTab('contacts')}
               className={activeTab === 'contacts' ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white'}
             >
               <List className="w-4 h-4 mr-2" /> All Contacts
             </Button>
           </div>
-          
+
           {activeTab === 'contacts' ? (
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-[0_0_20px_-5px_rgba(var(--primary-rgb),0.5)]">
+            <Button onClick={() => setShowAddContact(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-[0_0_20px_-5px_rgba(var(--primary-rgb),0.5)]">
               <UserPlus className="w-4 h-4 mr-2" /> Add Contact
             </Button>
           ) : (
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-[0_0_20px_-5px_rgba(var(--primary-rgb),0.5)]">
+            <Button onClick={() => setShowAddLead(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-[0_0_20px_-5px_rgba(var(--primary-rgb),0.5)]">
               <Plus className="w-4 h-4 mr-2" /> Add Lead
             </Button>
           )}
@@ -187,17 +265,19 @@ export default function CRMPage() {
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             {[
-              { label: 'Total Contacts', value: contacts.length, trend: '+12%', color: 'text-white' },
-              { label: 'Active Leads', value: leads.length, trend: '+5%', color: 'text-primary' },
-              { label: 'Customers', value: contacts.filter(c => c.status === 'customer').length, trend: '+2%', color: 'text-green-400' },
-              { label: 'New This Month', value: '24', trend: '+1.2%', color: 'text-orange-400' },
+              { label: 'Total Contacts', value: kpis.totalContacts, trend: null, color: 'text-white' },
+              { label: 'Active Leads', value: kpis.activeLeads, trend: null, color: 'text-primary' },
+              { label: 'Customers', value: kpis.customers, trend: null, color: 'text-green-400' },
+              { label: 'New This Month', value: kpis.newThisMonth, trend: kpis.newThisMonthTrend, color: 'text-orange-400' },
             ].map((kpi, i) => (
               <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-sm">
                 <CardContent className="p-6">
                   <p className="text-white/50 text-sm font-medium mb-2">{kpi.label}</p>
                   <div className="flex items-end justify-between">
                     <h3 className={`text-3xl font-bold ${kpi.color}`}>{loading ? <Skeleton className="h-9 w-16 bg-white/10" /> : kpi.value}</h3>
-                    <span className="text-green-400 text-sm font-medium bg-green-400/10 px-2 py-1 rounded-md">{kpi.trend}</span>
+                    {kpi.trend && (
+                      <span className="text-green-400 text-sm font-medium bg-green-400/10 px-2 py-1 rounded-md whitespace-nowrap">{kpi.trend}</span>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -223,7 +303,12 @@ export default function CRMPage() {
               <table className="w-full text-sm text-left">
                 <thead className="text-xs text-white/50 uppercase bg-black/20 border-b border-white/10">
                   <tr>
-                    <th className="px-6 py-4 font-medium flex items-center gap-2 cursor-pointer hover:text-white">Contact <ArrowUpDown className="w-3 h-3" /></th>
+                    <th
+                      onClick={() => setSortDir(d => d === 'asc' ? 'desc' : 'asc')}
+                      className="px-6 py-4 font-medium flex items-center gap-2 cursor-pointer hover:text-white select-none"
+                    >
+                      Contact <ArrowUpDown className="w-3 h-3" />
+                    </th>
                     <th className="px-6 py-4 font-medium">Status</th>
                     <th className="px-6 py-4 font-medium">Score</th>
                     <th className="px-6 py-4 font-medium">Tags</th>
@@ -292,8 +377,10 @@ export default function CRMPage() {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button variant="ghost" size="icon" className="w-8 h-8 text-white/50 hover:text-white hover:bg-white/10">
-                              <Mail className="w-4 h-4" />
+                            <Button asChild variant="ghost" size="icon" className="w-8 h-8 text-white/50 hover:text-white hover:bg-white/10">
+                              <a href={`mailto:${contact.email}`} onClick={(e) => e.stopPropagation()}>
+                                <Mail className="w-4 h-4" />
+                              </a>
                             </Button>
                             <Button variant="ghost" size="icon" className="w-8 h-8 text-white/50 hover:text-white hover:bg-white/10">
                               <MoreHorizontal className="w-4 h-4" />
@@ -313,6 +400,103 @@ export default function CRMPage() {
         </div>
       )}
 
+      {showAddContact && (
+        <QuickAddModal
+          title="Add Contact"
+          fields={['name', 'email', 'company', 'phone']}
+          onClose={() => setShowAddContact(false)}
+          onSubmit={handleAddContact}
+        />
+      )}
+
+      {showAddLead && (
+        <QuickAddModal
+          title="Add Lead"
+          fields={['name', 'email', 'company', 'value', 'serviceInterest']}
+          onClose={() => setShowAddLead(false)}
+          onSubmit={handleAddLead}
+        />
+      )}
+
+    </div>
+  );
+}
+
+interface QuickAddField {
+  key: 'name' | 'email' | 'company' | 'phone' | 'value' | 'serviceInterest';
+  label: string;
+  type?: string;
+}
+
+const FIELD_DEFS: Record<QuickAddField['key'], QuickAddField> = {
+  name: { key: 'name', label: 'Name' },
+  email: { key: 'email', label: 'Email', type: 'email' },
+  company: { key: 'company', label: 'Company' },
+  phone: { key: 'phone', label: 'Phone' },
+  value: { key: 'value', label: 'Deal Value ($)', type: 'number' },
+  serviceInterest: { key: 'serviceInterest', label: 'Service Interest' },
+};
+
+function QuickAddModal({
+  title,
+  fields,
+  onClose,
+  onSubmit,
+}: {
+  title: string;
+  fields: QuickAddField['key'][];
+  onClose: () => void;
+  onSubmit: (data: any) => Promise<void>;
+}) {
+  const [values, setValues] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!values.name?.trim() || !values.email?.trim()) return;
+    setSaving(true);
+    await onSubmit({
+      ...values,
+      value: values.value ? Number(values.value) : undefined,
+    });
+    setSaving(false);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="bg-zinc-900 border-white/10 w-full max-w-md shadow-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-white/10">
+          <h3 className="font-bold text-white">{title}</h3>
+          <Button variant="ghost" size="icon" className="h-7 w-7 text-white/50 hover:text-white" onClick={onClose}>
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+        <div className="p-5 space-y-4">
+          {fields.map(key => {
+            const def = FIELD_DEFS[key];
+            return (
+              <div key={key} className="space-y-1.5">
+                <label className="text-sm font-medium text-white/70">{def.label}</label>
+                <Input
+                  type={def.type || 'text'}
+                  value={values[key] || ''}
+                  onChange={e => setValues(prev => ({ ...prev, [key]: e.target.value }))}
+                  className="bg-black/20 border-white/10 text-white focus:border-primary/50"
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex justify-end gap-2 p-4 border-t border-white/10 bg-white/5">
+          <Button variant="ghost" onClick={onClose} className="text-white/70 hover:text-white">Cancel</Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={saving || !values.name?.trim() || !values.email?.trim()}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold"
+          >
+            {saving ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
+      </Card>
     </div>
   );
 }

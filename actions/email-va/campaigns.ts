@@ -3,6 +3,7 @@
 
 import { collections } from "../../lib/email-va/firebase";
 import { resend } from "../../lib/email-va/resend";
+import { groqAI } from "../../lib/email-va/groq";
 
 interface CreateCampaignParams {
   name: string;
@@ -23,6 +24,8 @@ interface CampaignData {
     total: number;
     sent: number;
     failed: number;
+    opened: number;
+    clicked: number;
   };
   createdAt: any;
   updatedAt: any;
@@ -71,6 +74,8 @@ export async function createCampaign(params: CreateCampaignParams) {
         total: 0,
         sent: 0,
         failed: 0,
+        opened: 0,
+        clicked: 0,
       },
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -223,6 +228,20 @@ export async function sendCampaign(campaignId: string) {
         if (result.success) {
           sent++;
           console.log(`  ✅ Sent to ${lead.email}`);
+
+          // Record this send so the open/click webhook can attribute events
+          // back to this campaign (collections.sent / emailVaSent).
+          if (result.id) {
+            await collections.sent.add({
+              campaignId,
+              leadId: lead.id,
+              email: lead.email,
+              resendEmailId: result.id,
+              sentAt: new Date(),
+              openedAt: null,
+              clickedAt: null,
+            });
+          }
         } else {
           failed++;
           errors.push(`${lead.email}: ${result.error || 'Unknown error'}`);
@@ -296,6 +315,8 @@ export async function getCampaigns() {
           total: data.stats?.total || 0,
           sent: data.stats?.sent || 0,
           failed: data.stats?.failed || 0,
+          opened: data.stats?.opened || 0,
+          clicked: data.stats?.clicked || 0,
         },
         createdAt: serializeTimestamp(data.createdAt),
         updatedAt: serializeTimestamp(data.updatedAt),
@@ -335,6 +356,8 @@ export async function getCampaign(campaignId: string) {
         total: data.stats?.total || 0,
         sent: data.stats?.sent || 0,
         failed: data.stats?.failed || 0,
+        opened: data.stats?.opened || 0,
+        clicked: data.stats?.clicked || 0,
       },
       createdAt: serializeTimestamp(data.createdAt),
       updatedAt: serializeTimestamp(data.updatedAt),
@@ -357,6 +380,21 @@ export async function deleteCampaign(campaignId: string) {
     return { success: true };
   } catch (error: any) {
     console.error('Delete campaign error:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Draft a campaign subject/body from a short brief using Groq.
+ */
+export async function generateCampaignDraft(prompt: string): Promise<
+  { success: true; subject: string; body: string } | { success: false; error: string }
+> {
+  try {
+    const draft = await groqAI.generateCampaignDraft(prompt);
+    return { success: true as const, ...draft };
+  } catch (error: any) {
+    console.error('Generate campaign draft error:', error);
     return { success: false, error: error.message };
   }
 }

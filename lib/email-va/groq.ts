@@ -103,6 +103,30 @@ Get straight to the point.`;
   }
 
   /**
+   * Draft a marketing campaign (subject + body) from a short brief.
+   */
+  async generateCampaignDraft(prompt: string): Promise<{ subject: string; body: string }> {
+    const systemPrompt = `You are a marketing copywriter for a software/digital agency.
+Given a short brief, write a cold marketing campaign email.
+Use {{name}} and {{company}} as personalization placeholders where natural.
+Keep the body under 150 words, friendly but professional, with a clear call to action.
+
+Return ONLY valid JSON: {"subject":"...","body":"..."}`;
+
+    try {
+      const response = await this.complete(systemPrompt, prompt, 400);
+      const result = JSON.parse(response);
+      return {
+        subject: result.subject || '',
+        body: result.body || '',
+      };
+    } catch (error) {
+      console.error('Campaign draft generation error:', error);
+      throw new Error('Failed to generate campaign draft');
+    }
+  }
+
+  /**
    * Core completion method
    */
   private async complete(

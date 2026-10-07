@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FaEnvelope, FaMapMarkerAlt, FaFacebookF, FaWhatsapp, FaLinkedin } from "react-icons/fa";
+import { FaEnvelope, FaFacebookF, FaWhatsapp, FaLinkedin } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
@@ -92,10 +92,6 @@ const Footer: React.FC = () => {
                   <FaEnvelope className="text-primary mt-0.5 group-hover:text-primary/80" />
                   <span>hello@digitalcowboy.com.au</span>
                 </a>
-              </li>
-              <li className="flex items-start gap-3 text-white/60 text-sm">
-                <FaMapMarkerAlt className="text-primary mt-0.5 flex-shrink-0" />
-                <span>Townsville, Queensland, Australia</span>
               </li>
             </ul>
           </div>

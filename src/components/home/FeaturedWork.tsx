@@ -4,29 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { PROJECTS as ALL_PROJECTS } from "@/data/projects";
 
-const PROJECTS = [
-  {
-    id: "audiomate",
-    client: "AudioMate",
-    category: "Web Application",
-    solved: "Needed a powerful all-in-one platform for professional-grade audio editing and transcription to streamline podcast workflows.",
-    built: "A custom Next.js web application with advanced features like automated transcription and audio summarization.",
-    result: "Streamlined creator workflows with integrated subscriptions.",
-    image: "/projects/audiomate-min.png",
-    href: "/work/audiomate"
-  },
-  {
-    id: "nq-fishing-adventures",
-    client: "NQ Fishing Adventures",
-    category: "Booking System & Website",
-    solved: "Needed a modern, mobile-friendly website designed for seamless trip planning and high-resolution visuals.",
-    built: "A high-performance marketing website with integrated trip planning and detailed service information.",
-    result: "Improved user experience for browsing boat options and booking.",
-    image: "/projects/nqfishing-min.png",
-    href: "/work/nq-fishing-adventures"
-  }
-];
+const FEATURED_SLUGS = ["hatbusiness", "townsville-tight-ass"];
+const PROJECTS = FEATURED_SLUGS.map((slug) =>
+  ALL_PROJECTS.find((p) => p.slug === slug)!
+);
 
 export default function FeaturedWork() {
   return (
@@ -71,7 +54,7 @@ export default function FeaturedWork() {
         <div className="grid lg:grid-cols-2 gap-8">
           {PROJECTS.map((project, index) => (
             <motion.div
-              key={project.id}
+              key={project.slug}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -79,22 +62,22 @@ export default function FeaturedWork() {
               className="group flex flex-col bg-white/5 rounded-3xl overflow-hidden border border-white/10 hover:bg-white/10 transition-colors"
             >
               {/* Project Image */}
-              <Link href={project.href} className="block relative h-[300px] sm:h-[400px] w-full overflow-hidden bg-white/5">
+              <Link href={`/work/${project.slug}`} className="block relative h-[300px] sm:h-[400px] w-full overflow-hidden bg-white/5">
                 <Image
                   src={project.image}
-                  alt={project.client}
+                  alt={project.name}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
               </Link>
-              
+
               {/* Project Details */}
               <div className="p-8 sm:p-10 flex flex-col flex-grow">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="text-sm font-semibold tracking-wider text-primary uppercase">{project.category}</span>
                   <span className="w-1 h-1 rounded-full bg-white/30" />
-                  <span className="text-sm font-medium text-white/60">{project.client}</span>
+                  <span className="text-sm font-medium text-white/60">{project.name}</span>
                 </div>
                 
                 <div className="space-y-6 mb-8 flex-grow">
@@ -115,7 +98,7 @@ export default function FeaturedWork() {
                 </div>
 
                 <Link
-                  href={project.href}
+                  href={`/work/${project.slug}`}
                   className="inline-flex items-center gap-2 text-white font-medium group/btn mt-auto"
                 >
                   Read Case Study

@@ -37,6 +37,28 @@ class ResendService {
   }
 
   /**
+   * Verifies a Resend/Svix webhook signature. Returns true if valid, or if no
+   * RESEND_WEBHOOK_SECRET is configured yet (so existing webhooks keep working
+   * until the secret is set — same opt-in pattern as CRON_SECRET elsewhere).
+   * Set RESEND_WEBHOOK_SECRET (from the Resend dashboard's webhook settings)
+   * to actually enforce verification.
+   */
+  verifyWebhookSignature(rawBody: string, headers: { id: string; timestamp: string; signature: string }): boolean {
+    const secret = process.env.RESEND_WEBHOOK_SECRET;
+    if (!secret) {
+      console.warn('[Webhook] RESEND_WEBHOOK_SECRET not set — skipping signature verification.');
+      return true;
+    }
+    try {
+      this.client.webhooks.verify({ payload: rawBody, headers, webhookSecret: secret });
+      return true;
+    } catch (error) {
+      console.error('[Webhook] Signature verification failed:', error);
+      return false;
+    }
+  }
+
+  /**
    * Send single email
    */
   async sendEmail(params: SendEmailParams): Promise<{

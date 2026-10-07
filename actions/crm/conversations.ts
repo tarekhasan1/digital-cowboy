@@ -1,7 +1,7 @@
 'use server';
 
 import { collections } from '@/lib/email-va/firebase';
-import { Contact } from './contacts';
+import { Contact, getContactsByIds } from './contacts';
 
 export interface Conversation {
   id?: string;
@@ -16,6 +16,8 @@ export interface Conversation {
   createdAt?: string | Date;
   updatedAt?: string | Date;
   lastMessageAt?: string | Date;
+  contactName?: string;
+  contactEmail?: string;
 }
 
 export async function getConversations(filters?: {
@@ -75,6 +77,15 @@ export async function getConversations(filters?: {
     if (filters?.limit) {
       conversations = conversations.slice(0, filters.limit);
     }
+
+    // Enrich with sender name/email so the inbox list can show who an email
+    // is from/to instead of just the subject.
+    const { contacts } = await getContactsByIds(conversations.map((c: any) => c.contactId));
+    conversations = conversations.map((c: any) => ({
+      ...c,
+      contactName: contacts?.[c.contactId]?.name,
+      contactEmail: contacts?.[c.contactId]?.email,
+    }));
 
     return { success: true, conversations };
   } catch (error: any) {

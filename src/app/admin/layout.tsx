@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Home, Mail, LogOut, User, Shield, BarChart3, FileText, MessageSquare, Zap, Settings, ChevronDown } from 'lucide-react';
+import { Home, Mail, LogOut, User, Shield, BarChart3, FileText, MessageSquare, Zap, Settings, ChevronDown, Calendar } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   DropdownMenu,
@@ -155,6 +155,7 @@ function AdminContent({ children }: { children: React.ReactNode }) {
   const modules = [
     { name: 'Inbox', icon: <Mail className="w-4 h-4 mr-2" />, href: '/admin/inbox' },
     { name: 'CRM Contacts', icon: <User className="w-4 h-4 mr-2" />, href: '/admin/crm' },
+    { name: 'Bookings', icon: <Calendar className="w-4 h-4 mr-2" />, href: '/admin/bookings' },
     { name: 'Campaigns', icon: <MessageSquare className="w-4 h-4 mr-2" />, href: '/admin/campaigns' },
     { name: 'Automations', icon: <Zap className="w-4 h-4 mr-2" />, href: '/admin/automations' },
     { name: 'Analytics', icon: <BarChart3 className="w-4 h-4 mr-2" />, href: '/admin/analytics' },
