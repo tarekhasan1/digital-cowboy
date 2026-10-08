@@ -29,7 +29,7 @@ export default function Home() {
       <WhyUsSection />
       <ProcessSection />
       {/* Testimonials would go here - for now using a placeholder or existing if compatible, but skipping as per plan to build later or leave for real data */}
-      <RecurringServices />
+      {/* <RecurringServices /> */}
       <FAQSection />
       <GlobalCTA />
     </main>

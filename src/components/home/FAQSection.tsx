@@ -59,15 +59,15 @@ export default function FAQSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden"
+              className="glass-card rounded-2xl overflow-hidden hover:bg-white/10 transition-colors duration-300"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                className="group w-full flex items-center justify-between p-6 text-left focus:outline-none"
               >
-                <span className="text-lg font-semibold text-white pr-8">{faq.question}</span>
+                <span className="text-lg font-semibold text-white group-hover:text-primary transition-colors pr-8">{faq.question}</span>
                 <ChevronDown 
-                  className={`flex-shrink-0 text-white/50 transition-transform duration-300 ${openIndex === index ? "rotate-180" : ""}`}
+                  className={`flex-shrink-0 text-white/50 group-hover:text-primary transition-all duration-300 ${openIndex === index ? "rotate-180" : ""}`}
                   size={24}
                 />
               </button>

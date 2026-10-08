@@ -46,11 +46,11 @@ const SERVICES = [
 
 export default function BuildAutomateGrow() {
   return (
-    <section className="py-24 bg-background relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-background relative overflow-hidden">
       <AnimatedBackground variant="section" accent="blue" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-20 max-w-3xl mx-auto">
+        <div className="text-center mb-12 md:mb-16 max-w-3xl mx-auto">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -80,38 +80,41 @@ export default function BuildAutomateGrow() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.15 }}
-                className="group relative flex flex-col glass-card rounded-3xl p-8 hover:bg-white/10 transition-all duration-300"
+                className="group relative flex flex-col glass-card rounded-3xl p-6 lg:p-8 hover:bg-white/10 transition-all duration-300"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none`} />
                 
                 <div className="relative z-10 flex-grow">
-                  <div className={`w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300 ${service.iconColor}`}>
-                    <Icon size={28} />
+                  <div className="flex items-center gap-4 mb-3">
+                    <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 ${service.iconColor}`}>
+                      <Icon size={24} />
+                    </div>
+                    <h3 className="text-lg font-bold tracking-widest text-white/90">{service.title}</h3>
                   </div>
                   
-                  <h3 className="text-xl font-bold tracking-widest text-white/90 mb-2">{service.title}</h3>
-                  <h4 className="text-2xl font-semibold text-white mb-4">{service.subtitle}</h4>
-                  <p className="text-white/60 mb-8 leading-relaxed">
+                  <h4 className="text-xl font-semibold text-white mb-3 leading-tight">{service.subtitle}</h4>
+                  
+                  <p className="text-sm text-white/60 mb-6 leading-relaxed">
                     {service.description}
                   </p>
 
-                  <ul className="space-y-3 mb-10">
+                  <ul className="space-y-2 mb-6">
                     {service.features.map((feature, i) => (
                       <li key={i} className="flex items-start text-sm text-white/70">
-                        <span className="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-white/30 flex-shrink-0" />
+                        <span className="mr-2 mt-2 w-1.5 h-1.5 rounded-full bg-white/30 flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="relative z-10 pt-6 border-t border-white/10 mt-auto">
+                <div className="relative z-10 pt-5 border-t border-white/10 mt-auto">
                   <Link
                     href={service.href}
-                    className="inline-flex items-center gap-2 text-white font-medium group/btn"
+                    className="inline-flex items-center gap-2 text-sm text-white font-medium group/btn"
                   >
                     {service.cta}
-                    <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                    <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </motion.div>

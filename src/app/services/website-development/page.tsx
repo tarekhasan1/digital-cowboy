@@ -67,12 +67,13 @@ export default function WebsiteDevelopmentPage() {
             {SERVICES.map((service, index) => {
               const Icon = service.icon;
               return (
-                <div key={index} className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-colors">
-                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-6">
+                <div key={index} className="group p-8 rounded-3xl glass-card hover:-translate-y-2 hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-300 relative z-10">
                     <Icon size={24} />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
-                  <p className="text-white/60 leading-relaxed">
+                  <h3 className="text-xl font-bold text-white mb-3 relative z-10">{service.title}</h3>
+                  <p className="text-white/60 leading-relaxed relative z-10">
                     {service.description}
                   </p>
                 </div>

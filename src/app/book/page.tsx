@@ -98,13 +98,13 @@ export default function BookPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-background pt-24">
-      <section className="py-20 relative overflow-hidden">
+      <section className="py-12 relative overflow-hidden">
         <AnimatedBackground variant="section" accent="emerald" />
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
             Book a Discovery Call
           </h1>
-          <p className="text-xl text-white/60 leading-relaxed">
+          <p className="text-lg text-white/60 leading-relaxed">
             Free, no-pressure 15 minutes to figure out the smartest way forward for your business.
           </p>
         </div>
@@ -113,7 +113,7 @@ export default function BookPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur-sm"
+            className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-sm"
           >
             {step === 'success' ? (
               <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
@@ -189,46 +189,48 @@ export default function BookPage() {
                 )}
 
                 {step === 3 && (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <button type="button" onClick={() => setStep(2)} className="flex items-center gap-1 text-sm text-white/50 hover:text-white">
-                      <ArrowLeft className="w-4 h-4" /> Back
-                    </button>
-                    <p className="text-sm text-white/50 -mt-2">
-                      {selectedDate && selectedTime && formatFullDateTime(selectedDate, selectedTime)}
-                    </p>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <button type="button" onClick={() => setStep(2)} className="flex items-center gap-1 text-sm text-white/50 hover:text-white">
+                        <ArrowLeft className="w-4 h-4" /> Back
+                      </button>
+                      <p className="text-xs text-white/50">
+                        {selectedDate && selectedTime && formatFullDateTime(selectedDate, selectedTime)}
+                      </p>
+                    </div>
 
                     {error && (
-                      <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-start gap-3">
+                      <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex items-start gap-3">
                         <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                         <p className="text-red-400/80 text-sm">{error}</p>
                       </div>
                     )}
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-white/80">Name *</label>
-                        <input required name="name" value={formData.name} onChange={handleChange} type="text" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="Your name" />
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-white/80">Name *</label>
+                        <input required name="name" value={formData.name} onChange={handleChange} type="text" className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="Your name" />
                       </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-white/80">Business / Company</label>
-                        <input name="company" value={formData.company} onChange={handleChange} type="text" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="Company name" />
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-white/80">Email *</label>
-                        <input required name="email" value={formData.email} onChange={handleChange} type="email" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="you@company.com" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-white/80">Phone</label>
-                        <input name="phone" value={formData.phone} onChange={handleChange} type="tel" className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="Optional" />
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-white/80">Business / Company</label>
+                        <input name="company" value={formData.company} onChange={handleChange} type="text" className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="Company name" />
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-white/80">What do you need?</label>
-                      <select name="service" value={formData.service} onChange={handleChange} className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow appearance-none">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-white/80">Email *</label>
+                        <input required name="email" value={formData.email} onChange={handleChange} type="email" className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="you@company.com" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-white/80">Phone</label>
+                        <input name="phone" value={formData.phone} onChange={handleChange} type="tel" className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow" placeholder="Optional" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-white/80">What do you need?</label>
+                      <select name="service" value={formData.service} onChange={handleChange} className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow appearance-none">
                         <option value="">Select an option</option>
                         <option value="website">Website</option>
                         <option value="webapp">Web Application</option>
@@ -241,13 +243,13 @@ export default function BookPage() {
                       </select>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-white/80">Anything we should know beforehand?</label>
-                      <textarea name="notes" value={formData.notes} onChange={handleChange} rows={3} className="w-full bg-background border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow resize-none" placeholder="Optional" />
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-white/80">Anything we should know beforehand?</label>
+                      <textarea name="notes" value={formData.notes} onChange={handleChange} rows={2} className="w-full bg-background border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow resize-none" placeholder="Optional" />
                     </div>
 
-                    <button disabled={submitting} type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 px-8 py-4 rounded-xl text-base font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] flex items-center justify-center gap-2">
-                      {submitting && <Loader2 className="w-5 h-5 animate-spin" />}
+                    <button disabled={submitting} type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] flex items-center justify-center gap-2 mt-2">
+                      {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                       {submitting ? 'Booking...' : 'Confirm Booking'}
                     </button>
                   </form>

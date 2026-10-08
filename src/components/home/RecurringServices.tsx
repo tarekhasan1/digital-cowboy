@@ -87,10 +87,10 @@ export default function RecurringServices() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className={`relative flex flex-col p-8 rounded-3xl border ${
+              className={`group relative flex flex-col p-8 rounded-3xl border transition-all duration-500 hover:-translate-y-2 ${
                 plan.popular 
-                  ? "bg-white/10 border-primary shadow-2xl shadow-primary/10" 
-                  : "bg-white/5 border-white/10"
+                  ? "bg-white/10 border-primary shadow-2xl shadow-primary/20 hover:shadow-primary/30 backdrop-blur-md" 
+                  : "glass-card hover:border-white/20 hover:bg-white/10"
               }`}
             >
               {plan.popular && (
@@ -118,10 +118,10 @@ export default function RecurringServices() {
               
               <Link
                 href="/contact"
-                className={`w-full py-4 rounded-xl text-center font-semibold transition-colors ${
+                className={`w-full py-4 rounded-xl text-center font-semibold transition-all duration-300 ${
                   plan.popular
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "bg-white/10 text-white hover:bg-white/20"
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/20"
+                    : "bg-white/10 text-white hover:bg-white/20 hover:scale-[1.02] active:scale-[0.98]"
                 }`}
               >
                 Discuss a Plan

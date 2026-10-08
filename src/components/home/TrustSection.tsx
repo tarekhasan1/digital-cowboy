@@ -35,9 +35,9 @@ export default function TrustSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="text-center p-6 rounded-2xl bg-white/5 border border-white/10"
+              className="group text-center p-6 rounded-2xl glass-card hover:-translate-y-1 hover:bg-white/10 transition-all duration-300"
             >
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">{metric.value}</div>
+              <div className="text-3xl md:text-4xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{metric.value}</div>
               <div className="text-sm font-medium text-white/60 uppercase tracking-wider">{metric.label}</div>
             </motion.div>
           ))}

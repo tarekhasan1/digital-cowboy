@@ -74,18 +74,24 @@ export default function SolutionsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                className="group p-8 rounded-3xl glass-card hover:-translate-y-2 hover:bg-white/10 transition-all duration-500 cursor-pointer relative overflow-hidden flex flex-col"
               >
-                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-primary/20 group-hover:text-primary transition-colors text-white/80">
-                  <Icon size={24} />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-white/70">
+                    <Icon size={24} />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-primary transition-colors">{solution.title}</h3>
+                  <p className="text-white/60 text-sm leading-relaxed mb-6 flex-grow">
+                    {solution.description}
+                  </p>
+                  <div className="mt-auto pt-4 border-t border-white/10">
+                    <Link href="/contact" className="inline-flex items-center text-sm font-medium text-white group-hover:text-primary transition-colors">
+                      Discuss this solution <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">{solution.title}</h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-6 flex-grow">
-                  {solution.description}
-                </p>
-                <Link href="/contact" className="inline-flex items-center text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
-                  Discuss this solution <ArrowRight size={16} className="ml-2" />
-                </Link>
               </motion.div>
             );
           })}

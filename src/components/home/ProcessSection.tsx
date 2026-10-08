@@ -72,13 +72,13 @@ export default function ProcessSection() {
                 className="relative group"
               >
                 {/* Node */}
-                <div className="w-16 h-16 rounded-2xl bg-black border border-white/20 flex items-center justify-center text-xl font-bold text-white mb-6 relative z-10 group-hover:border-primary group-hover:text-primary transition-colors shadow-lg mx-auto lg:mx-0">
+                <div className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center text-xl font-bold text-white mb-6 relative z-10 group-hover:scale-110 group-hover:border-primary/50 group-hover:bg-primary/10 group-hover:text-primary transition-all duration-300 shadow-lg mx-auto lg:mx-0">
                   {step.num}
                 </div>
                 
                 <div className="text-center lg:text-left">
-                  <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-                  <p className="text-sm text-white/60 leading-relaxed">
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">{step.title}</h3>
+                  <p className="text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors">
                     {step.desc}
                   </p>
                 </div>

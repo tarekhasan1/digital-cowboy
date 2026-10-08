@@ -59,7 +59,7 @@ export default function InsightsFilterGrid({ posts }: { posts: InsightPost[] }) 
                 <Link
                   href={`/insights/${insight.slug}`}
                   key={index}
-                  className="group flex flex-col bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:border-primary/50 transition-all duration-300"
+                  className="group flex flex-col glass-card rounded-3xl overflow-hidden hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 relative"
                 >
                   <div className="relative h-60 w-full overflow-hidden bg-black/20">
                     {insight.coverImage && (
