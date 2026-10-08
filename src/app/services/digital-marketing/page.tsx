@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import GlobalCTA from "@/components/GlobalCTA";
 import { Search, MapPin, MousePointerClick, BarChart, PenTool, LayoutTemplate } from "lucide-react";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export const metadata: Metadata = {
   title: "Digital Marketing & SEO Services | DigitalCowboy",
@@ -45,7 +46,7 @@ export default function DigitalMarketingPage() {
     <main className="flex flex-col min-h-screen bg-background pt-24">
       {/* Hero Section */}
       <section className="py-20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none" />
+        <AnimatedBackground variant="hero" accent="amber" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-sm font-semibold tracking-widest uppercase mb-8">
             Digital Marketing

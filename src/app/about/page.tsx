@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GlobalCTA from "@/components/GlobalCTA";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export const metadata: Metadata = {
   title: "About Us | DigitalCowboy",
@@ -11,7 +12,7 @@ export default function AboutPage() {
     <main className="flex flex-col min-h-screen bg-background pt-24">
       {/* Hero */}
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+        <AnimatedBackground variant="hero" accent="violet" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-8">
             We're DigitalCowboy.

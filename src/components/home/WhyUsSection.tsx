@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const REASONS = [
   {
@@ -32,8 +33,9 @@ const REASONS = [
 
 export default function WhyUsSection() {
   return (
-    <section className="py-24 bg-background border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-background border-t border-white/5 relative overflow-hidden">
+      <AnimatedBackground variant="corner" accent="rose" corner="bottom-right" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <div className="flex flex-col lg:flex-row gap-16">
           

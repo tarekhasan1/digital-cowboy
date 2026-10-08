@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
+import CursorGlow from "@/components/backgrounds/CursorGlow";
 
 export default function Hero() {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden bg-background">
-      {/* Premium Background Effects */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/20 blur-[120px] rounded-full pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      <AnimatedBackground variant="hero" accent="violet" />
+      <CursorGlow />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
         
         {/* Text Content */}
         <div className="max-w-2xl text-left pt-12 lg:pt-0">

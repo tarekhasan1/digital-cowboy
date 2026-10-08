@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { submitContactForm } from "@/actions/messages";
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,7 +64,7 @@ export default function ContactPage() {
   return (
     <main className="flex flex-col min-h-screen bg-background pt-24">
       <section className="py-20 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+        <AnimatedBackground variant="section" accent="violet" />
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center mb-12">
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
             Let's build something useful.

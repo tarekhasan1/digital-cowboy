@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import GlobalCTA from "@/components/GlobalCTA";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export const metadata: Metadata = {
   title: "Pricing | DigitalCowboy",
@@ -70,7 +71,7 @@ export default function PricingPage() {
   return (
     <main className="flex flex-col min-h-screen bg-background pt-24">
       <section className="py-20 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+        <AnimatedBackground variant="hero" accent="emerald" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
             Clear pricing. No surprises.

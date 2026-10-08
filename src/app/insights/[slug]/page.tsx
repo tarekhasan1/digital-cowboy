@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getInsightBySlug, getInsights } from "../../../../actions/insights";
 import { notFound } from "next/navigation";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export const dynamicParams = true;
 
@@ -35,7 +36,7 @@ export default async function InsightDetailPage({ params }: { params: { slug: st
       <article className="pb-24">
         {/* Header */}
         <header className="relative pt-20 pb-16 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+          <AnimatedBackground variant="section" accent="blue" />
           
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <Link 

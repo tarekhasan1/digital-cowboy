@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { PROJECTS as ALL_PROJECTS } from "@/data/projects";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const FEATURED_SLUGS = ["hatbusiness", "townsville-tight-ass"];
 const PROJECTS = FEATURED_SLUGS.map((slug) =>
@@ -13,8 +14,9 @@ const PROJECTS = FEATURED_SLUGS.map((slug) =>
 
 export default function FeaturedWork() {
   return (
-    <section className="py-24 bg-background border-t border-white/5 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-background border-t border-white/5 relative overflow-hidden">
+      <AnimatedBackground variant="corner" accent="violet" corner="top-left" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
@@ -67,7 +69,7 @@ export default function FeaturedWork() {
                   src={project.image}
                   alt={project.name}
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
               </Link>

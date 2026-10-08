@@ -57,6 +57,22 @@
   @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
 }
 
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob-drift-1,
+  .animate-blob-drift-2,
+  .animate-blob-drift-3,
+  .animate-float-particle,
+  .animate-grid-pan,
+  .animate-spin-slow {
+    animation: none !important;
+  }
+}
+
 .subtle-ring {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
 }

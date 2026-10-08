@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GlobalCTA from "@/components/GlobalCTA";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | DigitalCowboy",
@@ -9,8 +10,9 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <main className="flex flex-col min-h-screen bg-background pt-24">
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative overflow-hidden">
+        <AnimatedBackground variant="minimal" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
             Privacy Policy
           </h1>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import GlobalCTA from "@/components/GlobalCTA";
 import { Bot, MessageSquare, Target, Zap, Server, Code } from "lucide-react";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export const metadata: Metadata = {
   title: "AI Automation Services | DigitalCowboy",
@@ -45,7 +46,7 @@ export default function AIAutomationPage() {
     <main className="flex flex-col min-h-screen bg-background pt-24">
       {/* Hero Section */}
       <section className="py-20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+        <AnimatedBackground variant="hero" accent="violet" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold tracking-widest uppercase mb-8">
             AI & Automation

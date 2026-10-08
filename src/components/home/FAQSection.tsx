@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const FAQS = [
   {
@@ -35,9 +36,10 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 bg-black border-t border-white/5">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section className="py-24 bg-black border-t border-white/5 relative overflow-hidden">
+      <AnimatedBackground variant="minimal" />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
         <div className="text-center mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}

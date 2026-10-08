@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 export const metadata: Metadata = {
   title: "Our Work | DigitalCowboy",
@@ -15,7 +16,7 @@ export default function WorkPage() {
     <main className="flex flex-col min-h-screen bg-background pt-24">
       {/* Hero Section */}
       <section className="py-20 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+        <AnimatedBackground variant="hero" accent="blue" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6">
             Work we're proud of.
@@ -41,7 +42,7 @@ export default function WorkPage() {
                     src={project.image}
                     alt={project.name}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                 </Link>

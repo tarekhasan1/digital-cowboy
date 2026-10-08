@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Code2, Bot, TrendingUp } from "lucide-react";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const SERVICES = [
   {
@@ -46,8 +47,7 @@ const SERVICES = [
 export default function BuildAutomateGrow() {
   return (
     <section className="py-24 bg-background relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
+      <AnimatedBackground variant="section" accent="blue" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-20 max-w-3xl mx-auto">

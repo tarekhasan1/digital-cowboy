@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const STEPS = [
   {
@@ -33,8 +34,8 @@ const STEPS = [
 export default function ProcessSection() {
   return (
     <section className="py-24 bg-black border-t border-white/5 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
-      
+      <AnimatedBackground variant="section" accent="amber" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-20 max-w-2xl mx-auto">
           <motion.h2 

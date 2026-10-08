@@ -4,6 +4,7 @@ import Image from "next/image";
 import GlobalCTA from "@/components/GlobalCTA";
 import { ArrowLeft, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { getProjectBySlug as getProject, Project } from "@/data/projects";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const DEFAULT_PROJECT: Project = {
   slug: "default",
@@ -50,8 +51,9 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
   return (
     <main className="flex flex-col min-h-screen bg-background pt-24">
       {/* Hero Section */}
-      <section className="py-20 border-b border-white/5">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-20 border-b border-white/5 relative overflow-hidden">
+        <AnimatedBackground variant="section" accent="violet" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <Link href="/work" className="inline-flex items-center text-white/50 hover:text-white transition-colors mb-8 text-sm">
             <ArrowLeft size={16} className="mr-2" /> Back to Work
           </Link>
@@ -129,7 +131,7 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
                   src={img}
                   alt={`${project.name} screenshot ${i + 1}`}
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
               </div>
             ))}
