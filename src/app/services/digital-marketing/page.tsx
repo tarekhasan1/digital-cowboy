@@ -55,7 +55,7 @@ export default function DigitalMarketingPage() {
             Turn attention into growth.
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-            We don't promise vanity metrics or guaranteed rankings. We combine SEO, paid advertising, and conversion optimization to build measurable business growth.
+            We combine SEO, paid ads, and conversion optimization to drive measurable business growth.
           </p>
         </div>
       </section>

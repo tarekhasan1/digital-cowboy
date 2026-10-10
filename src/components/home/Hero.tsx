@@ -33,11 +33,11 @@ export default function Hero() {
             </h1>
             
             <p className="text-xl sm:text-2xl font-medium text-white/90 mb-4">
-              Digital solutions that help ambitious businesses work smarter, attract more customers and scale faster.
+              Digital solutions to work smarter and scale faster.
             </p>
             
             <p className="text-base sm:text-lg text-white/60 mb-10 max-w-xl">
-              From high-converting websites and custom software to AI automation and digital marketing, DigitalCowboy helps businesses build better digital systems and turn them into measurable growth.
+              We build high-converting websites, custom software, AI automation, and digital marketing systems that drive measurable growth.
             </p>
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">

@@ -8,32 +8,32 @@ import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 const SOLUTIONS = [
   {
     title: "Get More Leads",
-    description: "Websites, landing pages, SEO, advertising and conversion optimization.",
+    description: "Websites, SEO, ads, and conversion optimization.",
     icon: Target,
   },
   {
     title: "Automate Your Business",
-    description: "AI, CRM, integrations and workflow automation.",
+    description: "AI, CRM, and seamless workflow automations.",
     icon: Zap,
   },
   {
     title: "Launch a New Product",
-    description: "SaaS, web applications, mobile apps and custom software.",
+    description: "SaaS, web apps, and custom software.",
     icon: Rocket,
   },
   {
     title: "Improve Your Online Presence",
-    description: "Website redesign, branding, UX and digital strategy.",
+    description: "Redesigns, branding, UX, and digital strategy.",
     icon: Globe,
   },
   {
     title: "Sell Online",
-    description: "eCommerce, payment systems, customer portals and automation.",
+    description: "eCommerce, portals, and automated payments.",
     icon: ShoppingCart,
   },
   {
     title: "Scale Your Operations",
-    description: "Custom software, dashboards, integrations and business systems.",
+    description: "Custom software, dashboards, and integrations.",
     icon: BarChart3,
   }
 ];
@@ -60,7 +60,7 @@ export default function SolutionsSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-white/60 max-w-2xl mx-auto"
           >
-            We don't just sell technology. We build solutions designed around your specific business goals.
+            We build solutions designed around your specific business goals.
           </motion.p>
         </div>
 

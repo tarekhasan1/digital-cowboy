@@ -55,7 +55,7 @@ export default function AIAutomationPage() {
             Put AI to work.
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Practical AI systems that save time, improve customer experiences and automate repetitive business processes. No hype, just real operational leverage.
+            Practical AI systems that save time and automate workflows. Real operational leverage.
           </p>
         </div>
       </section>

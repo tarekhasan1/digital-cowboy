@@ -50,7 +50,7 @@ export default function SoftwareDevelopmentPage() {
             Software built around your business.
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Stop forcing your business to fit off-the-shelf software. We build scalable web applications and SaaS platforms that work exactly the way you do.
+            We build scalable web applications and SaaS platforms that work exactly the way you do.
           </p>
         </div>
       </section>

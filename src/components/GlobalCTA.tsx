@@ -20,7 +20,7 @@ export default function GlobalCTA() {
             Have a digital problem to solve?
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Let's figure out the smartest way forward. No technical jargon, just a practical plan for your business.
+            Let's figure out the smartest way forward with a practical plan for your business.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -10,7 +10,7 @@ const SERVICES = [
     id: "build",
     title: "BUILD",
     subtitle: "Websites. Software. Digital Products.",
-    description: "We design and build fast, modern digital experiences and custom software around the way your business actually works.",
+    description: "Fast, modern digital experiences and custom software built for your business.",
     icon: Code2,
     features: ["Business websites", "Web applications", "SaaS platforms", "Mobile apps", "eCommerce", "Customer portals", "Booking systems", "Custom software"],
     cta: "Explore Build Services",
@@ -22,7 +22,7 @@ const SERVICES = [
     id: "automate",
     title: "AUTOMATE",
     subtitle: "AI. Automation. Smarter Workflows.",
-    description: "We remove repetitive work, connect your tools and introduce practical AI systems that save time and improve customer experience.",
+    description: "Eliminate repetitive tasks with practical AI and seamless tool integrations.",
     icon: Bot,
     features: ["AI assistants", "AI chatbots", "Lead qualification", "CRM automation", "Workflow automation", "API integrations", "Automated follow-ups", "Internal business tools"],
     cta: "Explore Automation",
@@ -34,7 +34,7 @@ const SERVICES = [
     id: "grow",
     title: "GROW",
     subtitle: "SEO. Marketing. Conversion.",
-    description: "We help businesses attract the right people, convert more visitors and build sustainable digital growth.",
+    description: "Attract the right audience, convert visitors, and drive sustainable growth.",
     icon: TrendingUp,
     features: ["SEO", "Local SEO", "Google Ads", "Meta Ads", "Conversion optimization", "Analytics", "Content strategy", "Digital marketing"],
     cta: "Explore Growth",
@@ -66,7 +66,7 @@ export default function BuildAutomateGrow() {
             transition={{ delay: 0.1 }}
             className="text-lg text-white/60"
           >
-            A complete digital ecosystem built to scale your business.
+            A complete ecosystem to scale your business.
           </motion.p>
         </div>
 

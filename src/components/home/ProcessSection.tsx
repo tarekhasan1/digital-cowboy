@@ -7,27 +7,27 @@ const STEPS = [
   {
     num: "01",
     title: "Discover",
-    desc: "We understand your business, audience, goals and biggest opportunities."
+    desc: "We analyze your business, goals, and opportunities."
   },
   {
     num: "02",
     title: "Plan",
-    desc: "We define the strategy, scope, technology and roadmap."
+    desc: "We define your strategy, technology, and roadmap."
   },
   {
     num: "03",
     title: "Build",
-    desc: "Our designers and developers turn the plan into a working digital product."
+    desc: "We turn the plan into a working digital product."
   },
   {
     num: "04",
     title: "Launch",
-    desc: "We test, optimize and launch your project properly."
+    desc: "We test, optimize, and launch your project."
   },
   {
     num: "05",
     title: "Grow",
-    desc: "We provide ongoing support, automation, SEO and digital growth."
+    desc: "Ongoing support, automation, and digital growth."
   }
 ];
 
@@ -53,7 +53,7 @@ export default function ProcessSection() {
             transition={{ delay: 0.1 }}
             className="text-lg text-white/60"
           >
-            A clear, structured process designed to eliminate surprises and deliver results.
+            A structured process designed to deliver results.
           </motion.p>
         </div>
 

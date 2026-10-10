@@ -55,7 +55,7 @@ export default function WebsiteDevelopmentPage() {
             Websites that do more than look good.
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
-            Your website should attract attention, explain your value, generate enquiries and make it easier for customers to take action. We build high-converting digital platforms.
+            We build high-converting digital platforms that attract attention and generate enquiries.
           </p>
         </div>
       </section>
